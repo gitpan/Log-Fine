@@ -77,7 +77,7 @@ use Log::Fine::Logger;
 use Storable qw( dclone );
 use Sys::Syslog qw( :macros );
 
-our $VERSION = '0.12';
+our $VERSION = '0.12.1';
 our @ISA     = qw( Exporter );
 
 =head2 Log Levels
@@ -426,7 +426,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Fine.pm 66 2008-05-27 15:49:27Z cfuhrman $
+  $Id: Fine.pm 70 2008-05-27 20:48:17Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
