@@ -57,7 +57,7 @@ sub msgWrite
         # if we have a formatter defined, then use that, otherwise, just
         # print the raw message
         $msg = $self->{formatter}->format($lvl, $msg, $skip)
-                if defined $self->{formatter};
+            if defined $self->{formatter};
 
         # Victory!
         return $msg;
@@ -110,7 +110,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: String.pm 35 2008-05-21 14:26:37Z cfuhrman $
+  $Id: String.pm 76 2008-06-06 16:36:28Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 06-handle-console.t 39 2008-05-21 21:03:20Z cfuhrman $
+# $Id: 06-handle-console.t 76 2008-06-06 16:36:28Z cfuhrman $
 #
 
 use Test::More;
@@ -11,7 +11,7 @@ use Log::Fine::Handle::Console;
 
 # set message
 my $msg =
-"Stop by this disaster town, we put our eyes to the sun and say 'Hello!'";
+    "Stop by this disaster town, we put our eyes to the sun and say 'Hello!'";
 
 # add a handle.  Note we use the default formatter.
 my $handle = Log::Fine::Handle::Console->new();
@@ -24,7 +24,7 @@ my $handle = Log::Fine::Handle::Console->new();
         if ($@) {
                 plan skip_all =>
 "Test::Output 0.10 or above required for testing Console output"
-                        if $@;
+                    if $@;
         } else {
                 plan tests => 9;
         }

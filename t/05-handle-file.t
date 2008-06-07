@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 05-handle-file.t 36 2008-05-21 14:28:35Z cfuhrman $
+# $Id: 05-handle-file.t 76 2008-06-06 16:36:28Z cfuhrman $
 #
 
 use Test::Simple tests => 12;
@@ -25,8 +25,8 @@ use Log::Fine::Logger;
 
         # add a handle.  Note we use the default formatter.
         my $handle =
-                Log::Fine::Handle::File->new(file      => $file,
-                                             autoflush => 1);
+            Log::Fine::Handle::File->new(file      => $file,
+                                         autoflush => 1);
 
         # do some validation
         ok($handle->isa("Log::Fine::Handle"));

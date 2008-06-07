@@ -81,42 +81,39 @@ sub format
 
                 # just include the script name
                 return
-                        sprintf("[%s] %-4s (%s) %s\n",
-                                strftime($self->{timestamp_format},
-                                         localtime(time)
-                                ),
-                                $lvls->[$lvl],
-                                basename($0),
-                                $msg
-                        );
+                    sprintf("[%s] %-4s (%s) %s\n",
+                            strftime($self->{timestamp_format}, localtime(time)
+                            ),
+                            $lvls->[$lvl],
+                            basename($0),
+                            $msg
+                    );
 
         } elsif (defined $c[0] and $c[0] eq "main") {
 
                 # just include the script name and line number
                 return
-                        sprintf("[%s] %-4s (%s:%d) %s\n",
-                                strftime($self->{timestamp_format},
-                                         localtime(time)
-                                ),
-                                $lvls->[$lvl],
-                                basename($c[1]),
-                                $c[2],
-                                $msg
-                        );
+                    sprintf("[%s] %-4s (%s:%d) %s\n",
+                            strftime($self->{timestamp_format}, localtime(time)
+                            ),
+                            $lvls->[$lvl],
+                            basename($c[1]),
+                            $c[2],
+                            $msg
+                    );
 
         } else {
 
                 # log package, subroutine, and line number
                 return
-                        sprintf("[%s] %-4s (%s():%d) %s\n",
-                                strftime($self->{timestamp_format},
-                                         localtime(time)
-                                ),
-                                $lvls->[$lvl],
-                                $c[3] || "{undef}",
-                                $c[2] || 0,
-                                $msg
-                        );
+                    sprintf("[%s] %-4s (%s():%d) %s\n",
+                            strftime($self->{timestamp_format}, localtime(time)
+                            ),
+                            $lvls->[$lvl],
+                            $c[3] || "{undef}",
+                            $c[2] || 0,
+                            $msg
+                    );
 
         }
 
@@ -172,7 +169,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Detailed.pm 49 2008-05-23 00:26:47Z cfuhrman $
+  $Id: Detailed.pm 76 2008-06-06 16:36:28Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

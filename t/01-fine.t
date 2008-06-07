@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 01-fine.t 31 2008-05-20 20:36:06Z cfuhrman $
+# $Id: 01-fine.t 76 2008-06-06 16:36:28Z cfuhrman $
 #
 
 use Test::Simple tests => 40;
@@ -44,7 +44,7 @@ use Log::Fine qw( :macros :masks );
                 # bitmask all and err for later testing
                 $all |= eval "$masks->[$i]";
                 $err |= eval "$masks->[$i]"
-                        if ($i <= ERR);
+                    if ($i <= ERR);
 
                 ok($fine->can($lvls->[$i]));
                 ok($fine->can($masks->[$i]));

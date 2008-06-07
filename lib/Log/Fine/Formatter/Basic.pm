@@ -64,9 +64,9 @@ sub format
 
         # return the formatted string
         return
-                sprintf("[%s] %-4s %s\n",
-                        strftime($self->{timestamp_format}, localtime(time)),
-                        $lvls->[$lvl], $msg);
+            sprintf("[%s] %-4s %s\n",
+                    strftime($self->{timestamp_format}, localtime(time)),
+                    $lvls->[$lvl], $msg);
 
 }          # format()
 
@@ -116,7 +116,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Basic.pm 49 2008-05-23 00:26:47Z cfuhrman $
+  $Id: Basic.pm 76 2008-06-06 16:36:28Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

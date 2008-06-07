@@ -77,7 +77,7 @@ use Log::Fine::Logger;
 use Storable qw( dclone );
 use Sys::Syslog qw( :macros );
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 our @ISA     = qw( Exporter );
 
 =head2 Log Levels
@@ -225,10 +225,10 @@ BEGIN {
 
 # define some convenient mask shorthands
 use constant LOGMASK_ALL => LOGMASK_EMERG | LOGMASK_ALERT | LOGMASK_CRIT |
-        LOGMASK_ERR | LOGMASK_WARNING | LOGMASK_NOTICE | LOGMASK_INFO |
-        LOGMASK_DEBUG;
+    LOGMASK_ERR | LOGMASK_WARNING | LOGMASK_NOTICE | LOGMASK_INFO |
+    LOGMASK_DEBUG;
 use constant LOGMASK_ERROR => LOGMASK_EMERG | LOGMASK_ALERT | LOGMASK_CRIT |
-        LOGMASK_ERR;
+    LOGMASK_ERR;
 
 =head1 METHODS
 
@@ -279,13 +279,13 @@ sub getLogger
 
         # validate name
         croak "First parameter must be a valid name!\n"
-                unless (defined $name and $name =~ /\w/);
+            unless (defined $name and $name =~ /\w/);
 
         # if the requested logger is found, then return it, otherwise
         # store and return a newly created logger object.
         $loggers->{$name} = Log::Fine::Logger->new(name => $name)
-                unless (defined $loggers->{$name}
-                        and $loggers->{$name}->isa("Log::Fine::Logger"));
+            unless (defined $loggers->{$name}
+                    and $loggers->{$name}->isa("Log::Fine::Logger"));
 
         # return the logger
         return $loggers->{$name};
@@ -311,7 +311,7 @@ sub clone
 
         # validate object
         croak "First argument must be valid Log::Fine object!\n"
-                unless $obj->isa("Log::Fine");
+            unless $obj->isa("Log::Fine");
 
         # return the cloned object
         return dclone($obj);
@@ -356,8 +356,9 @@ sub _init
 I'd like the thank the following people for either inspiration or past
 work on logging: Josh Glover for his work as well as teaching me all I
 know about object-oriented programming in perl.  Dan Boger for taking
-the patience to review this code and offer his own suggestions.
-Additional thanks to Tom Maher and Chris Joseph for encouragement.
+the time and patience to review this code and offer his own
+suggestions.  Additional thanks to Tom Maher and Chris Josephs for
+encouragement.
 
 =head2 Related Modules/Frameworks
 
@@ -426,7 +427,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Fine.pm 73 2008-05-27 21:01:20Z cfuhrman $
+  $Id: Fine.pm 77 2008-06-06 16:37:03Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

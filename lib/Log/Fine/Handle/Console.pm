@@ -58,7 +58,7 @@ sub msgWrite
         # if we have a formatter defined, then use that, otherwise, just
         # print the raw message
         $msg = $self->{formatter}->format($lvl, $msg, $skip)
-                if defined $self->{formatter};
+            if defined $self->{formatter};
 
         # where do we send the message to?
         if (defined $self->{use_stderr}) {
@@ -87,7 +87,7 @@ sub _init
 
         # by default, we print messages to STDOUT
         $self->{use_stderr} = undef
-                unless (exists $self->{use_stderr});
+            unless (exists $self->{use_stderr});
 
         # Victory!
         return $self;
@@ -140,7 +140,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Console.pm 49 2008-05-23 00:26:47Z cfuhrman $
+  $Id: Console.pm 76 2008-06-06 16:36:28Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
