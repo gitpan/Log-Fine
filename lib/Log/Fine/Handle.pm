@@ -66,8 +66,10 @@ sub isLoggable
         croak "No Level :$lvl\n"
             unless (defined $lvl and $lvl =~ /\d+/);
 
+	my $shifted = 2 << $lvl;
+
         # bitand the level and the mask to see if we're loggable
-        return (($self->{mask} & $lvl) == $lvl) ? 1 : undef;
+        return (($self->{mask} & $shifted) == $shifted) ? 1 : undef;
 
 }          # isLoggable()
 
@@ -194,7 +196,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Handle.pm 76 2008-06-06 16:36:28Z cfuhrman $
+  $Id: Handle.pm 82 2008-07-02 22:11:44Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

@@ -77,7 +77,7 @@ use Log::Fine::Logger;
 use Storable qw( dclone );
 use Sys::Syslog qw( :macros );
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 our @ISA     = qw( Exporter );
 
 =head2 Log Levels
@@ -335,13 +335,10 @@ sub _init
         unless (defined $self->{name} and $self->{name} =~ /\w/) {
 
                 # grab the class name
-                $_ = ref $self;
+                $self->{name} = ref $self;
+                $self->{name} =~ /\:(\w+)$/;
+                $self->{name} = lc($+) . _getObjectCount();
 
-                # now grab the last name in that class
-                /\:\:(\w+)$/;
-
-                # and set name
-                $self->{name} = lc($1) . _getObjectCount();
         }
 
         # Victory!
@@ -427,7 +424,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Fine.pm 77 2008-06-06 16:37:03Z cfuhrman $
+  $Id: Fine.pm 84 2008-07-02 22:12:41Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
