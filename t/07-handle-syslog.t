@@ -1,10 +1,10 @@
 #!perl -T
 
 #
-# $Id: 07-handle-syslog.t 76 2008-06-06 16:36:28Z cfuhrman $
+# $Id: 07-handle-syslog.t 91 2008-07-04 22:56:06Z cfuhrman $
 #
 
-use Test::Simple tests => 8;
+use Test::Simple tests => 7;
 
 use File::Basename;
 use Log::Fine;
@@ -29,7 +29,6 @@ use Sys::Syslog qw( :standard :macros );
 
         # these should be set to their default values
         ok($handle->{mask} == Log::Fine::Handle->DEFAULT_LOGMASK);
-        ok($handle->{level} == DEBG);
         ok($handle->{formatter}->isa("Log::Fine::Formatter::Basic"));
 
         # Syslog-specific attributes

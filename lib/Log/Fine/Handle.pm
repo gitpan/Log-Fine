@@ -14,7 +14,6 @@ Sets up an output handle for log messages
     my $handle = Log::Fine::Handle::Foo
         ->new( name      => "foo0",
                mask      => Log::Fine::Handle->DEFAULT_LOGMASK,
-               level     => DEBG,
                formatter => Log::Fine::Formatter:Basic->new() );
 
     # see if a handle is loggable at a given level
@@ -136,10 +135,6 @@ sub _init
         $self->{mask} = DEFAULT_LOGMASK
             unless defined $self->{mask};
 
-        # by default, set the level to DEBG
-        $self->{level} = DEBG
-            unless defined $self->{level};
-
         # set the default formatter
         $self->{formatter} = Log::Fine::Formatter::Basic->new()
             unless (defined $self->{formatter}
@@ -196,7 +191,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Handle.pm 82 2008-07-02 22:11:44Z cfuhrman $
+  $Id: Handle.pm 91 2008-07-04 22:56:06Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

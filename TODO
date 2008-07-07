@@ -1,8 +1,9 @@
-Last Modified: $Date: 2008-07-02 15:12:08 -0700 (Wed, 02 Jul 2008) $
-
- * properly test bitmask combinations so I don't get egg on my face
-   again.
+Last Modified: $Date: 2008-07-05 11:07:36 -0700 (Sat, 05 Jul 2008) $
 
  * clean up macros.
+
+ * Narrow down Sys::Syslog requirement
+
+ * Switch to Module::Build?
 
 

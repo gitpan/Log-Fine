@@ -1,10 +1,10 @@
 #!perl -T
 
 #
-# $Id: 05-handle-file.t 76 2008-06-06 16:36:28Z cfuhrman $
+# $Id: 05-handle-file.t 91 2008-07-04 22:56:06Z cfuhrman $
 #
 
-use Test::Simple tests => 12;
+use Test::Simple tests => 11;
 
 use File::Spec::Functions;
 use FileHandle;
@@ -33,7 +33,6 @@ use Log::Fine::Logger;
 
         # these should be set to their default values
         ok($handle->{mask} == Log::Fine::Handle->DEFAULT_LOGMASK);
-        ok($handle->{level} == DEBG);
         ok($handle->{formatter}->isa("Log::Fine::Formatter::Basic"));
 
         # File-specific attributes
