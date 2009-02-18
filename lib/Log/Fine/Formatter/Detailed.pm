@@ -82,25 +82,16 @@ sub format
                 # just include the script name
                 return
                     sprintf("[%s] %-4s (%s) %s\n",
-                            strftime($self->{timestamp_format}, localtime(time)
-                            ),
-                            $lvls->[$lvl],
-                            basename($0),
-                            $msg
-                    );
+                            $self->_getFmtTime(), $lvls->[$lvl], basename($0),
+                            $msg);
 
         } elsif (defined $c[0] and $c[0] eq "main") {
 
                 # just include the script name and line number
                 return
                     sprintf("[%s] %-4s (%s:%d) %s\n",
-                            strftime($self->{timestamp_format}, localtime(time)
-                            ),
-                            $lvls->[$lvl],
-                            basename($c[1]),
-                            $c[2],
-                            $msg
-                    );
+                            $self->_getFmtTime(), $lvls->[$lvl],
+                            basename($c[1]), $c[2], $msg);
 
         } else {
 
@@ -169,11 +160,11 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Detailed.pm 76 2008-06-06 16:36:28Z cfuhrman $
+  $Id: Detailed.pm 121 2009-02-04 23:46:05Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2009 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

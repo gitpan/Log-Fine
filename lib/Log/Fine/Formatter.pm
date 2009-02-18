@@ -11,7 +11,9 @@ Provides a formatting facility for log messages
     use Log::Fine::Formatter;
 
     my $handle    = Log::Fine::Handle::Console->new();
-    my $formatter = Log::Fine::Formatter::Detailed->new();
+    my $formatter = Log::Fine::Formatter::Detailed->new(
+      timestamp_format => "%Y-%m-%d %H:%M:%S"
+    );
 
     # by default, the handle will set its formatter to
     # Log::Fine::Formatter::Basic.  If that's not what you want, set
@@ -20,6 +22,14 @@ Provides a formatting facility for log messages
 
     # set the time-stamp to "YYYY-MM-DD HH:MM:SS"
     $formatter->setTimestamp("%Y-%m-%d %H:%M:%S");
+
+    # high resolution timestamps with milliseconds are
+    # supported thus:
+    my $hires_formatter =
+      Log::Fine::Formatter::Basic->new(
+        hires => 1,
+        timestamp_format => "%H:%M:%S.%%millis%%",
+      );
 
 =head1 DESCRIPTION
 
@@ -31,6 +41,25 @@ formatter sub-class.  By default, the time-stamp format is "%c".  See
 L</"setTimestamp($format)"> and the L<strftime> man page for further
 details.
 
+=head2 High Resolution Timestamps
+
+High Resolution time stamps are generated using the L<Time::HiRes>
+module.  Depending on your distribution of perl, this may or may not
+be installed.  Add the string "%%millis%%" (without the quotes) where
+you would like milliseconds displayed within your format.  For example:
+
+    $formatter->setTimestamp("%H:%M:%S.%%millis%%");
+
+Please note you I<must> enable high resolution mode during Formatter
+construction as so:
+
+    my $formatter = Log::Fine::Formatter::Basic->new( hires => 1 );
+
+By default, the time-stamp format for high resolution mode is
+"%H:%M:%S.%%millis%%".  This can be changed via the
+L</"setTimestamp($format)"> method or set during formatter
+construction.
+
 =cut
 
 use strict;
@@ -41,11 +70,13 @@ package Log::Fine::Formatter;
 use base qw( Log::Fine );
 
 use Carp;
+use POSIX qw( strftime );
 
-# Constant: LOG_TIMESTAMP_FORMAT
+# Constant: LOG_TIMESTAMP_FORMAT, LOG_TIMESTAMP_FORMAT_PRECISE
 #
 # strftime(3)-compatible format string
-use constant LOG_TIMESTAMP_FORMAT => "%c";
+use constant LOG_TIMESTAMP_FORMAT         => "%c";
+use constant LOG_TIMESTAMP_FORMAT_PRECISE => "%H:%M:%S.%%millis%%";
 
 =head1 METHODS
 
@@ -110,18 +141,66 @@ sub _init
         # make sure we load in the logger object
         require Log::Fine::Logger;
 
-        # set {timestamp_format} to the default if necessary
-        $self->{timestamp_format} = LOG_TIMESTAMP_FORMAT
-            unless (defined $self->{timestamp_format}
-                    and $self->{timestamp_format} =~ /\w+/);
+        # verify that we can load the Time::HiRes module
+        if ($self->{hires}) {
 
+                eval "use Time::HiRes";
+                croak
+"Time::HiRes failed to load.  Please install Time::HiRes via CPAN"
+                    if $@;
+
+                # set {timestamp_format} to default high precision
+                # format if necessary.
+                $self->{timestamp_format} = LOG_TIMESTAMP_FORMAT_PRECISE
+                    unless (defined $self->{timestamp_format}
+                            and $self->{timestamp_format} =~ /\w+/);
+
+        } else {
+
+                # set {timestamp_format} to the default if necessary
+                $self->{timestamp_format} = LOG_TIMESTAMP_FORMAT
+                    unless (defined $self->{timestamp_format}
+                            and $self->{timestamp_format} =~ /\w+/);
+
+        }
+
+        # Victory!
         return $self;
 
 }          # _init()
 
+##
+# Formats the time string returned
+
+sub _getFmtTime
+{
+        my $seconds;
+
+        my $self = shift;
+        my $fmt  = $self->{timestamp_format};
+
+        if ($self->{hires}) {
+
+                # use Time::HiRes to get seconds and milliseconds
+                my $time = sprintf("%.05f", &Time::HiRes::time);
+                my @t = split /\./, $time;
+
+                # and format
+                $fmt =~ s/%%millis%%/$t[1]/g;
+                $seconds = $time;
+
+        } else {
+                $seconds = time;
+        }
+
+        # return the formatted time
+        return strftime($fmt, localtime($seconds));
+
+}          # _getFmtTime()
+
 =head1 SEE ALSO
 
-L<perl>, L<strftime>, L<Log::Fine>
+L<perl>, L<strftime>, L<Log::Fine>, L<Time::HiRes>
 
 =head1 AUTHOR
 
@@ -165,11 +244,11 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Formatter.pm 76 2008-06-06 16:36:28Z cfuhrman $
+  $Id: Formatter.pm 127 2009-02-06 19:25:55Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2009 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...
