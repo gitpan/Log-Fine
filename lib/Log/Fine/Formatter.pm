@@ -18,10 +18,10 @@ Provides a formatting facility for log messages
     # by default, the handle will set its formatter to
     # Log::Fine::Formatter::Basic.  If that's not what you want, set
     # it to preference.
-    $handle->setFormatter($formatter);
+    $handle->formatter($formatter);
 
     # set the time-stamp to "YYYY-MM-DD HH:MM:SS"
-    $formatter->setTimestamp("%Y-%m-%d %H:%M:%S");
+    $formatter->timeStamp("%Y-%m-%d %H:%M:%S");
 
     # high resolution timestamps with milliseconds are
     # supported thus:
@@ -38,8 +38,8 @@ must inherit from this class.  The formatter class allows developers
 to adjust the time-stamp in a log message to a customizable
 strftime-compatible string without the tedious mucking about writing a
 formatter sub-class.  By default, the time-stamp format is "%c".  See
-L</"setTimestamp($format)"> and the L<strftime> man page for further
-details.
+L</timeStamp> and the L<strftime(3)> man page on your system for
+further details.
 
 =head2 High Resolution Timestamps
 
@@ -48,7 +48,7 @@ module.  Depending on your distribution of perl, this may or may not
 be installed.  Add the string "%%millis%%" (without the quotes) where
 you would like milliseconds displayed within your format.  For example:
 
-    $formatter->setTimestamp("%H:%M:%S.%%millis%%");
+    $formatter->timeStamp("%H:%M:%S.%%millis%%");
 
 Please note you I<must> enable high resolution mode during Formatter
 construction as so:
@@ -56,9 +56,8 @@ construction as so:
     my $formatter = Log::Fine::Formatter::Basic->new( hires => 1 );
 
 By default, the time-stamp format for high resolution mode is
-"%H:%M:%S.%%millis%%".  This can be changed via the
-L</"setTimestamp($format)"> method or set during formatter
-construction.
+"%H:%M:%S.%%millis%%".  This can be changed via the L</timeStamp>
+method or set during formatter construction.
 
 =cut
 
@@ -69,7 +68,6 @@ package Log::Fine::Formatter;
 
 use base qw( Log::Fine );
 
-use Carp;
 use POSIX qw( strftime );
 
 # Constant: LOG_TIMESTAMP_FORMAT, LOG_TIMESTAMP_FORMAT_PRECISE
@@ -80,22 +78,13 @@ use constant LOG_TIMESTAMP_FORMAT_PRECISE => "%H:%M:%S.%%millis%%";
 
 =head1 METHODS
 
-=head2 getTimestamp()
-
-Returns the current L<strftime(3)-compatible|strftime> format string for
-timestamped log messages
-
-=cut
-
-sub getTimestamp
-{
-        my $self = shift;
-        return $self->{timestamp_format};
-}          # getTimeStamp
-
-=head2 format($lvl, $msg, $skip)
+=head2 format
 
 Returns the formatted message.  B<Must> be sub-classed!
+
+=head3 Returns
+
+The formatted string
 
 =cut
 
@@ -105,25 +94,83 @@ sub format
         my $self  = shift;
         my $class = ref $self;
 
-        croak "someone used an (abstract) Formatter object"
+        $self->_fatal("direct call to abstract method format()!")
             if $class eq 'Log::Fine::Formatter';
 
-        croak "call to abstract method ${class}::format()";
+        $self->_fatal("call to abstract method ${class}::format()");
 
 }          # format()
 
-=head2 setTimestamp($format)
+=head2 testFormat
 
-Sets the time-stamp format to the given L<strftime(3)-compatible|strftime>
-string.
+Special method used for unit tests only.
+I<Not for use in production environments!>
+
+=head3 Parameters
+
+=over
+
+=item  * level
+
+Level at which to log
+
+=item  * message
+
+Message to log
+
+=back
+
+=head3 Returns
+
+The formatted string
 
 =cut
 
-sub setTimestamp
+sub testFormat
 {
+
         my $self = shift;
-        $self->{timestamp_format} = shift;
-}          # setTimestamp;
+        my $lvl  = shift;
+        my $msg  = shift;
+
+        return $self->format($lvl, $msg, 0);
+
+}          # testFormat()
+
+=head2 timeStamp
+
+Getter/Setter for a L<strftime(3)-compatible|strftime> format string.
+If passed with an argument, sets the objects strftime compatible
+string.  Otherwise, returns the object's format string.
+
+=head3 Parameters
+
+=over
+
+=item  * string
+
+B<[optional]> L<strftime(3)> compatible string to set
+
+=back
+
+=head3 Returns
+
+L<strftime(3)> compatible string
+
+=cut
+
+sub timeStamp
+{
+
+        my $self = shift;
+        my $str  = shift;
+
+        $self->{timestamp_format} = $str
+            if (defined $str);
+
+        return $self->{timestamp_format};
+
+}          # timeStamp()
 
 # --------------------------------------------------------------------
 
@@ -145,9 +192,9 @@ sub _init
         if ($self->{hires}) {
 
                 eval "use Time::HiRes";
-                croak
+                $self->_fatal(
 "Time::HiRes failed to load.  Please install Time::HiRes via CPAN"
-                    if $@;
+                ) if $@;
 
                 # set {timestamp_format} to default high precision
                 # format if necessary.
@@ -172,7 +219,7 @@ sub _init
 ##
 # Formats the time string returned
 
-sub _getFmtTime
+sub _formatTime
 {
         my $seconds;
 
@@ -196,7 +243,7 @@ sub _getFmtTime
         # return the formatted time
         return strftime($fmt, localtime($seconds));
 
-}          # _getFmtTime()
+}          # _formatTime()
 
 =head1 SEE ALSO
 
@@ -244,11 +291,11 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Formatter.pm 127 2009-02-06 19:25:55Z cfuhrman $
+  $Id: Formatter.pm 205 2010-01-03 21:06:25Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2009 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2009, 2010 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

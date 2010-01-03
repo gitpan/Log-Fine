@@ -1,8 +1,9 @@
-Last Modified: $Date: 2009-02-05 10:01:51 -0800 (Thu, 05 Feb 2009) $
+Last Modified: $Date: 2010-01-03 11:30:43 -0800 (Sun, 03 Jan 2010) $
 
  * Switch to Module::Build?
 
- * Allow log levels to be loadable.  For instance (FINE, FINER,
-   FINEST, etc).  Maybe have a Levels class?
+ * Document _fatal()
 
  * Have Utils handle more than one Logger?
+
+ * Tutorial for defining Log::Fine::Levels sub-classes

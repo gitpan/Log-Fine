@@ -47,14 +47,37 @@ use base qw( Log::Fine::Formatter );
 use File::Basename;
 use Log::Fine;
 use Log::Fine::Formatter;
+use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
 =head1 METHODS
 
-=head2 format($lvl, $msg, $skip)
+=head2 format
 
-Returns the formatted message as follows:
+Formats the given message for the given level
+
+=head3 Parameters
+
+=over
+
+=item  * level
+
+Level at which to log (see L<Log::Fine::Levels>)
+
+=item  * message
+
+Message to log
+
+=item  * skip
+
+Controls caller skip level
+
+=back
+
+=head3 Returns
+
+The formatted text string in the form:
 
   [TIMESTAMP] <LEVEL> (<Package>::Method():<Line Number>) <MESSAGE>
 
@@ -70,8 +93,10 @@ sub format
         my $self = shift;
         my $lvl  = shift;
         my $msg  = shift;
-        my $skip = shift || Log::Fine::Logger->LOG_SKIP_DEFAULT;
-        my $lvls = Log::Fine->LOG_LEVELS;
+        my $skip = shift;
+
+        # Set skip to default if need be
+        $skip = Log::Fine::Logger->LOG_SKIP_DEFAULT unless (defined $skip);
 
         # get the caller
         my @c = caller($skip);
@@ -82,15 +107,17 @@ sub format
                 # just include the script name
                 return
                     sprintf("[%s] %-4s (%s) %s\n",
-                            $self->_getFmtTime(), $lvls->[$lvl], basename($0),
-                            $msg);
+                            $self->_formatTime(),
+                            $self->levelMap()->valueToLevel($lvl),
+                            basename($0), $msg);
 
         } elsif (defined $c[0] and $c[0] eq "main") {
 
                 # just include the script name and line number
                 return
                     sprintf("[%s] %-4s (%s:%d) %s\n",
-                            $self->_getFmtTime(), $lvls->[$lvl],
+                            $self->_formatTime(),
+                            $self->levelMap()->valueToLevel($lvl),
                             basename($c[1]), $c[2], $msg);
 
         } else {
@@ -98,13 +125,10 @@ sub format
                 # log package, subroutine, and line number
                 return
                     sprintf("[%s] %-4s (%s():%d) %s\n",
-                            strftime($self->{timestamp_format}, localtime(time)
-                            ),
-                            $lvls->[$lvl],
+                            $self->_formatTime(),
+                            $self->levelMap()->valueToLevel($lvl),
                             $c[3] || "{undef}",
-                            $c[2] || 0,
-                            $msg
-                    );
+                            $c[2] || 0, $msg);
 
         }
 
@@ -160,11 +184,11 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Detailed.pm 121 2009-02-04 23:46:05Z cfuhrman $
+  $Id: Detailed.pm 204 2010-01-03 20:58:08Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2009 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2009, 2010 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

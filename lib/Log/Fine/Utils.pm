@@ -28,7 +28,8 @@ Provides a functional wrapper around Log::Fine.
                facility  => LOG_LEVEL0 );
 
     # open the logging subsystem
-    OpenLog( $handle1, [$handle2], ... );
+    OpenLog( handles  => [ $handle1, [$handle2], ... ],
+             levelmap => "Syslog");
 
     # Log a message
     Log(INFO, "The angels have my blue box");
@@ -48,8 +49,8 @@ package Log::Fine::Utils;
 
 our @ISA = qw( Exporter );
 
-use Carp;
 use Log::Fine;
+use POSIX qw( strftime );
 
 # Exported functions
 our @EXPORT = qw( Log OpenLog );
@@ -60,8 +61,16 @@ our @EXPORT = qw( Log OpenLog );
 {
         my $logger;
 
-        sub _getLogger { return $logger }
-        sub _setLogger { $logger = shift }
+        sub _logger
+        {
+                my $obj = shift;
+
+                $logger = $obj
+                    if (defined $obj and ref $obj eq "Log::Fine::Logger");
+
+                return $logger;
+        }
+
 }
 
 =head1 FUNCTIONS
@@ -69,37 +78,27 @@ our @EXPORT = qw( Log OpenLog );
 The following functions are automatically exported by
 Log::Fine::Utils:
 
-=head2 OpenLog
-
-Opens the logging subsystem.  Accepts one or more handles as arguments.
-
-=cut
-
-sub OpenLog
-{
-        my @handles = @_;
-
-        # validate a handle was passed
-        croak "At least one handle must be defined"
-            unless (scalar @handles > 0);
-
-        # construct a generic logger
-        my $logger = Log::Fine->getLogger("GENERIC");
-
-        # Set our handles
-        $logger->registerHandle($_) foreach @handles;
-
-        # Save the logger
-        _setLogger($logger);
-
-        # Victory!
-        return 1;
-
-}          # OpenLog()
-
 =head2 Log
 
 Logs the message at the given log level
+
+=head3 Parameters
+
+=over
+
+=item  * level
+
+Level at which to log
+
+=item  * message
+
+Message to log
+
+=back
+
+=head3 Returns
+
+1 on success
 
 =cut
 
@@ -108,12 +107,14 @@ sub Log
 
         my $lvl = shift;
         my $msg = shift;
-        my $log = _getLogger();
+        my $log = _logger();
 
         # validate logger has been set
-        croak
+        croak(
+               sprintf("[%s] FATAL : %s\n",
+                       strftime("%c", localtime(time)),
 "Logging system has not been set up.  (See Log::Fine::Utils::OpenLog()"
-            unless (defined $log and $log->isa("Log::Fine::Logger"));
+               )) unless (defined $log and $log->isa("Log::Fine::Logger"));
 
         # make sure we log the correct calling method
         $log->incrSkip();
@@ -123,6 +124,63 @@ sub Log
         return 1;
 
 }          # Log()
+
+=head2 OpenLog
+
+Opens the logging subsystem.
+
+=head3 Parameters
+
+A hash containing the following keys:
+
+=over
+
+=item * handles
+
+An array ref containing one or more L<Log::Fine::Handle> objects
+
+=item * levelmap
+
+B<[optional]> L<Log::Fine::Levels> subclass to use.  Will default to
+"Syslog" if not defined.
+
+=back
+
+=head3 Returns
+
+1 on success
+
+=cut
+
+sub OpenLog
+{
+        my %data = @_;
+        my $levels = $data{levelmap} || "Syslog";
+
+        # validate a handle was passed
+        croak(
+               sprintf("[%s] FATAL : %s\n",
+                       strftime("%c", localtime(time)),
+                       "At least one handle must be defined"
+               ))
+            unless (    defined $data{handles}
+                    and ref $data{handles} eq "ARRAY"
+                    and scalar @{ $data{handles} } > 0);
+
+        my $log = Log::Fine->new(levelmap => $levels);
+
+        # construct a generic logger
+        my $logger = $log->logger("GENERIC");
+
+        # Set our handles
+        $logger->registerHandle($_) foreach @{ $data{handles} };
+
+        # Save the logger
+        _logger($logger);
+
+        return 1;
+
+}          # OpenLog()
 
 =head1 CAVEATS
 
@@ -175,11 +233,11 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Utils.pm 113 2008-12-12 23:06:58Z cfuhrman $
+  $Id: Utils.pm 205 2010-01-03 21:06:25Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2010 Christopher M. Fuhrman, 
 All rights reserved
 
 This program is free software licensed under the...

@@ -41,13 +41,37 @@ use base qw( Log::Fine::Formatter );
 
 use Log::Fine;
 use Log::Fine::Formatter;
+use Log::Fine::Levels;
+
 use POSIX qw( strftime );
 
 =head1 METHODS
 
-=head2 format($lvl, $msg, $skip)
+=head2 format
 
-Returns the formatted message as follows:
+Formats the given message for the given level
+
+=head3 Parameters
+
+=over
+
+=item  * level
+
+Level at which to log (see L<Log::Fine::Levels>)
+
+=item  * message
+
+Message to log
+
+=item  * skip
+
+[ignored] Controls caller skip level
+
+=back
+
+=head3 Returns
+
+The formatted text string in the form:
 
   [TIMESTAMP] LEVEL MESSAGE
 
@@ -59,12 +83,12 @@ sub format
         my $self = shift;
         my $lvl  = shift;
         my $msg  = shift;
-        my $skip = shift;                         # NOT USED
-        my $lvls = Log::Fine->LOG_LEVELS;
+        my $skip = shift;          # NOT USED
 
         # return the formatted string
         return
-            sprintf("[%s] %-4s %s\n", $self->_getFmtTime(), $lvls->[$lvl],
+            sprintf("[%s] %-4s %s\n",
+                    $self->_formatTime(), $self->levelMap()->valueToLevel($lvl),
                     $msg);
 
 }          # format()
@@ -115,11 +139,11 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Basic.pm 121 2009-02-04 23:46:05Z cfuhrman $
+  $Id: Basic.pm 204 2010-01-03 20:58:08Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2009 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2009, 2010 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

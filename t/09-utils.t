@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 09-utils.t 106 2008-12-08 21:18:13Z cfuhrman $
+# $Id: 09-utils.t 198 2010-01-03 20:03:49Z cfuhrman $
 #
 
 use Test::Simple tests => 5;
@@ -10,6 +10,7 @@ use File::Spec::Functions;
 use FileHandle;
 use Log::Fine;
 use Log::Fine::Handle::File;
+use Log::Fine::Levels::Java;
 use Log::Fine::Utils;
 
 {
@@ -29,13 +30,14 @@ use Log::Fine::Utils;
         unlink $file if -e $file;
 
         # open the logging sub-system
-        OpenLog($handle);
+        OpenLog(handles  => [$handle],
+                levelmap => "Java");
 
         # log a message
-        Log(INFO, $msg);
+        Log(FINE, $msg);
 
         # grab a ref to our filehandle
-        my $fh = $handle->getFileHandle();
+        my $fh = $handle->fileHandle();
 
         # see if a file handle was properly constructed
         ok($fh->isa("IO::File"));

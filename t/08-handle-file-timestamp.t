@@ -1,15 +1,18 @@
 #!perl -T
 
 #
-# $Id: 08-handle-file-timestamp.t 91 2008-07-04 22:56:06Z cfuhrman $
+# $Id: 08-handle-file-timestamp.t 196 2010-01-03 19:30:43Z cfuhrman $
 #
 
 use Test::Simple tests => 10;
 
 use File::Spec::Functions;
+
 use Log::Fine;
 use Log::Fine::Handle;
 use Log::Fine::Handle::File::Timestamp;
+use Log::Fine::Levels::Syslog;
+
 use POSIX qw( strftime );
 
 {
@@ -26,7 +29,7 @@ use POSIX qw( strftime );
         ok($handle->isa("Log::Fine::Handle"));
 
         # these should be set to their default values
-        ok($handle->{mask} == Log::Fine::Handle->DEFAULT_LOGMASK);
+        ok($handle->{mask} == $handle->levelMap()->bitmaskAll());
         ok($handle->{formatter}->isa("Log::Fine::Formatter::Basic"));
 
         # File-specific attributes

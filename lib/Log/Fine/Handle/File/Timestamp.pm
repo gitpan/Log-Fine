@@ -43,7 +43,6 @@ package Log::Fine::Handle::File::Timestamp;
 
 use base qw( Log::Fine::Handle::File );
 
-use Carp;
 use File::Spec::Functions;
 use FileHandle;
 use POSIX qw( strftime );
@@ -68,13 +67,13 @@ use constant TODAY_FORMAT => "%Y%m%d";
 
 =head1 OVERRIDDEN METHODS
 
-=head2 getFileHandle()
+=head2 fileHandle
 
-See L<Log::Fine::Handle::File>
+See L<Log::Fine::Handle::File/fileHandle>
 
 =cut
 
-sub getFileHandle
+sub fileHandle
 {
 
         my $self  = shift;
@@ -100,7 +99,7 @@ sub getFileHandle
         # generate a new filehandle
         $self->{_filehandle} = FileHandle->new(">> " . $filename);
 
-        croak "Unable to open log file $filename : $!\n"
+        $self->_fatal("Unable to open log file $filename : $!\n")
             unless defined $self->{_filehandle};
 
         # set autoflush if necessary
@@ -112,7 +111,7 @@ sub getFileHandle
         # return the newly created file handle
         return $self->{_filehandle};
 
-}          # getFileHandle();
+}          # fileHandle();
 
 =head1 SEE ALSO
 
@@ -161,11 +160,11 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Timestamp.pm 76 2008-06-06 16:36:28Z cfuhrman $
+  $Id: Timestamp.pm 200 2010-01-03 20:20:44Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2010 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

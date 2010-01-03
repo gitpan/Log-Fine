@@ -11,7 +11,7 @@ Returns the formatted string for testing purposes.
     use Log::Fine::Handle::String;
 
     # Get a new logger
-    my $log = Log::Fine->getLogger("foo");
+    my $log = Log::Fine->logger("foo");
 
     # register a file handle
     my $handle = Log::Fine::Handle::String->new();
@@ -35,11 +35,35 @@ use base qw( Log::Fine::Handle );
 
 =head1 METHODS
 
-=head2 msgWrite($lvl, $msg, $skip)
+=head2 msgWrite
 
-See L<Log::Fine::Handle>
+Returns the formatted message
 
-Returns the formatted message rather than the object.
+B<Note:> msgWrite() is an I<internal> method to the Log::Fine
+framework, meant to be sub-classed.  Use
+L<Log::Fine::Logger/log> for actual logging.
+
+=head3 Parameters
+
+=over
+
+=item  * level
+
+Level at which to log
+
+=item  * message
+
+Message to log
+
+=item  * skip
+
+Passed to L<caller|perlfunc/caller> for accurate method logging
+
+=back
+
+=head3 Returns
+
+The formatted message
 
 =cut
 
@@ -110,11 +134,11 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: String.pm 76 2008-06-06 16:36:28Z cfuhrman $
+  $Id: String.pm 200 2010-01-03 20:20:44Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2010 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...
