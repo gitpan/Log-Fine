@@ -198,14 +198,14 @@ sub _init
 
                 # set {timestamp_format} to default high precision
                 # format if necessary.
-                $self->{timestamp_format} = LOG_TIMESTAMP_FORMAT_PRECISE
+                $self->{timestamp_format} = $self->LOG_TIMESTAMP_FORMAT_PRECISE
                     unless (defined $self->{timestamp_format}
                             and $self->{timestamp_format} =~ /\w+/);
 
         } else {
 
                 # set {timestamp_format} to the default if necessary
-                $self->{timestamp_format} = LOG_TIMESTAMP_FORMAT
+                $self->{timestamp_format} = $self->LOG_TIMESTAMP_FORMAT
                     unless (defined $self->{timestamp_format}
                             and $self->{timestamp_format} =~ /\w+/);
 
@@ -291,7 +291,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Formatter.pm 205 2010-01-03 21:06:25Z cfuhrman $
+  $Id: Formatter.pm 213 2010-03-03 18:48:47Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

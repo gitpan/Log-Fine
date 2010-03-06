@@ -1,15 +1,16 @@
 #!perl -T
 
 #
-# $Id: 04-formatter.t 196 2010-01-03 19:30:43Z cfuhrman $
+# $Id: 04-formatter.t 214 2010-03-03 18:55:27Z cfuhrman $
 #
 
-use Test::More tests => 12;
+use Test::More tests => 15;
 
 use Log::Fine;
 use Log::Fine::Formatter;
 use Log::Fine::Formatter::Basic;
 use Log::Fine::Formatter::Detailed;
+use Log::Fine::Formatter::Syslog;
 use Log::Fine::Levels::Syslog;
 
 {
@@ -63,6 +64,20 @@ use Log::Fine::Levels::Syslog;
 
         ok($log4 =~
 /^\[.*?\] \w+ \(Log\:\:Fine\:\:Formatter\:\:Detailed\:\:format\(\)\:\d+\) $msg/
+        );
+
+        # now create a syslog formatter
+        my $syslog = Log::Fine::Formatter::Syslog->new();
+
+        ok(ref $syslog eq "Log::Fine::Formatter::Syslog");
+        ok($syslog->timeStamp() eq
+            Log::Fine::Formatter::Syslog->LOG_TIMESTAMP_FORMAT);
+
+        # format a message
+        my $log5 = $syslog->format(INFO, $msg, 1);
+
+        ok($log5 =~
+            /^\w+ [ 1-3][0-9] \d{2}:\d{2}:\d{2} [0-9a-zA-Z\-]+ .*?\[\d+\]: $msg/
         );
 
     SKIP: {

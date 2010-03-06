@@ -82,7 +82,7 @@ use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.30';
+our $VERSION = '0.31';
 
 =head2 Formatters
 
@@ -369,7 +369,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Fine.pm 200 2010-01-03 20:20:44Z cfuhrman $
+  $Id: Fine.pm 215 2010-03-06 20:32:33Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

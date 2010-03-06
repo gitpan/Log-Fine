@@ -164,7 +164,7 @@ SUPPORT
         <http://search.cpan.org/dist/Log-Fine>
 
 REVISION INFORMATION
-      $Id: README 201 2010-01-03 20:22:18Z cfuhrman $
+      $Id: Fine.pm 215 2010-03-06 20:32:33Z cfuhrman $
 
 COPYRIGHT & LICENSE
     Copyright (c) 2008, 2009, 2010 Christopher M. Fuhrman, All rights
