@@ -107,7 +107,7 @@ sub isLoggable
         my $lvl  = shift;
 
         # Return undef if level is not defined
-        return undef unless defined $lvl;
+        return unless defined $lvl;
 
         # convert level to value if we are given a string, otherwise
         # use value as is.
@@ -115,7 +115,7 @@ sub isLoggable
             ($lvl =~ /^\d+$/) ? $lvl : $self->levelMap()->levelToValue($lvl);
 
         # Make sure we have a valid value
-        return undef unless defined($val);
+        return unless defined($val);
 
         my $shifted = 2 << $val;
 
@@ -243,7 +243,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Handle.pm 205 2010-01-03 21:06:25Z cfuhrman $
+  $Id: Handle.pm 241 2010-05-10 20:50:51Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

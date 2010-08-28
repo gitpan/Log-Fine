@@ -74,6 +74,20 @@ The following methods are provided:
 
 Creates a new Log::Fine::Levels object
 
+=head3 Parameters
+
+=over
+
+=item  * levelmap
+
+The name of the level map to use (e.g., C<Syslog>, C<Java>, etc)
+
+=back
+
+=head3 Returns
+
+an L<Log::Fine::Levels> object
+
 =cut
 
 sub new
@@ -86,7 +100,7 @@ sub new
         my $levelClass = join("::", $class, $lvlmap);
 
         # validate levelclass
-        eval "require $levelClass;";
+        eval "require $levelClass";
 
         # Do we have the class defined?
         confess "Error : Level Class $levelClass does not exist : $@"
@@ -313,7 +327,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Levels.pm 200 2010-01-03 20:20:44Z cfuhrman $
+  $Id: Levels.pm 241 2010-05-10 20:50:51Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 03-logger.t 196 2010-01-03 19:30:43Z cfuhrman $
+# $Id: 03-logger.t 234 2010-05-09 19:00:24Z cfuhrman $
 #
 
 use Test::More tests => 11;
@@ -73,12 +73,12 @@ use Log::Fine::Logger;
                                 my $foo = Log::Fine::Logger->new(no_croak => 1);
                         },
                         qr/Loggers need names/,
-                        'logger(): Invoke without name'
+                        'logger(): Invoked without name'
                 );
                 stderr_like(
                         sub {
                                 $badlog->log(INFO,
-"It was lightning headaches and sweet avalance"
+"It was lightning headaches and sweet avalanche"
                                 );
                         },
                         qr/No handles defined/,

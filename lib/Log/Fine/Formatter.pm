@@ -68,6 +68,7 @@ package Log::Fine::Formatter;
 
 use base qw( Log::Fine );
 
+use Log::Fine::Logger;
 use POSIX qw( strftime );
 
 # Constant: LOG_TIMESTAMP_FORMAT, LOG_TIMESTAMP_FORMAT_PRECISE
@@ -185,13 +186,10 @@ sub _init
         # perform super initializations
         $self->SUPER::_init();
 
-        # make sure we load in the logger object
-        require Log::Fine::Logger;
-
         # verify that we can load the Time::HiRes module
         if ($self->{hires}) {
 
-                eval "use Time::HiRes";
+                eval "require Time::HiRes";
                 $self->_fatal(
 "Time::HiRes failed to load.  Please install Time::HiRes via CPAN"
                 ) if $@;
@@ -291,7 +289,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Formatter.pm 213 2010-03-03 18:48:47Z cfuhrman $
+  $Id: Formatter.pm 241 2010-05-10 20:50:51Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

@@ -61,6 +61,7 @@ our @EXPORT = qw( Log OpenLog );
 {
         my $logger;
 
+        # getter/setter for logger
         sub _logger
         {
                 my $obj = shift;
@@ -233,7 +234,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Utils.pm 205 2010-01-03 21:06:25Z cfuhrman $
+  $Id: Utils.pm 228 2010-04-09 18:27:48Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

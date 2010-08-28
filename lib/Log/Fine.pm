@@ -73,16 +73,16 @@ handlers can be defined to the user's taste.
 use strict;
 use warnings;
 
-require 5.006;
-
 package Log::Fine;
+
+require 5.006;
 
 use Carp;
 use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.32';
+our $VERSION = '0.33';
 
 =head2 Formatters
 
@@ -111,28 +111,30 @@ L<Log::Fine::Formatter>.
         my $objcount = 0;
 
         # getter/setter for levelMap.  Note that levelMap can only be
-        # set _once_.
+        # set _once_.  Once levelmap is set, any other value passed,
+        # whether a valid object or not, will be ignored!
         sub _levelMap
         {
 
                 my $map = shift;
 
-                if (    ($levelmap and $levelmap->isa("Log::Fine::Levels"))
-                     or (not defined $map)) {
-                        return $levelmap;
-                } elsif ($map and $map->isa("Log::Fine::Levels")) {
+                if (     defined $map
+                     and $map->isa("Log::Fine::Levels")
+                     and not $levelmap) {
                         $levelmap = $map;
-                } else {
+                } elsif (defined $map and not $levelmap) {
                         _fatal("Log::Fine",
-                                sprintf("Invalid Value: %s", $map || "{undef}")
-                        );
+                                sprintf("Invalid Value: %s"),
+                                $map || "{undef}");
                 }
+
+                return $levelmap;
 
         }          # _levelMap()
 
         sub _logger          { return $loggers }
         sub _objectCount     { return $objcount }
-        sub _incrObjectCount { $objcount++ }
+        sub _incrObjectCount { return ++$objcount; }
 
 }
 
@@ -159,6 +161,11 @@ A hash with the following keys
 
 [default: Syslog] Name of level map to use.  See L<Log::Fine::Levels>
 for further details
+
+=item  * no_croak
+
+[optional] If set to true, then do not L<croak|Carp> when
+L</"_fatal()"> is called.
 
 =back
 
@@ -228,24 +235,39 @@ sub logger
         $self->_fatal("First parameter must be a valid name!")
             unless (defined $name and $name =~ /\w/);
 
-        # Grab our list of loggers
-        my $loggers = _logger();
-
         # if the requested logger is found, then return it, otherwise
-        # store and return a newly created logger object.
-        $loggers->{$name} = Log::Fine::Logger->new(name => $name)
-            unless (defined $loggers->{$name}
-                    and $loggers->{$name}->isa("Log::Fine::Logger"));
+        # store and return a newly created logger object with the
+        # given name
+        _logger()->{$name} = Log::Fine::Logger->new(name => $name)
+            unless (defined _logger()->{$name}
+                    and _logger()->{$name}->isa("Log::Fine::Logger"));
 
         # return the logger
-        return $loggers->{$name};
+        return _logger()->{$name};
 
 }          # logger()
 
 # --------------------------------------------------------------------
 
-##
-# called when a fatal condition is encountered
+=head2 _fatal
+
+Private method that is called when a fatal (nonrecoverable) condition
+is encountered.  Will call L<croak|Carp> unless the {no_croak}
+attribute is set.
+
+This method can be overridden per taste.
+
+=head3 Parameters
+
+=over
+
+=item message
+
+Message passed to L<croak|Carp>.
+
+=back
+
+=cut
 
 sub _fatal
 {
@@ -255,7 +277,8 @@ sub _fatal
 
         printf STDERR "\n[%s] {%s} FATAL : %s\n",
             strftime("%c", localtime(time)),
-            ref $self || "undef", $msg;
+            ref $self || "{undef}", $msg;
+
         croak $msg
             unless $self->{no_croak};
 
@@ -284,7 +307,8 @@ sub _init
 
         # Set our levels if we need to
         _levelMap(Log::Fine::Levels->new($self->{levelmap}))
-            unless (_levelMap() and _levelMap()->isa("Log::Fine::Levels"));
+            unless (defined _levelMap()
+                    and _levelMap()->isa("Log::Fine::Levels"));
 
         # Victory!
         return $self;
@@ -369,7 +393,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Fine.pm 224 2010-03-15 19:01:25Z cfuhrman $
+  $Id: Fine.pm 246 2010-08-28 18:04:13Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 

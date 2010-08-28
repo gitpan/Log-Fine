@@ -120,21 +120,15 @@ sub format
                             $self->levelMap()->valueToLevel($lvl),
                             basename($c[1]), $c[2], $msg);
 
-        } else {
-
-                # log package, subroutine, and line number
-                return
-                    sprintf("[%s] %-4s (%s():%d) %s\n",
-                            $self->_formatTime(),
-                            $self->levelMap()->valueToLevel($lvl),
-                            $c[3] || "{undef}",
-                            $c[2] || 0, $msg);
-
         }
 
-        #
-        # NOT REACHED
-        #
+        # log package, subroutine, and line number
+        return
+            sprintf("[%s] %-4s (%s():%d) %s\n",
+                    $self->_formatTime(),
+                    $self->levelMap()->valueToLevel($lvl),
+                    $c[3] || "{undef}",
+                    $c[2] || 0, $msg);
 
 }          # format()
 
@@ -184,7 +178,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Detailed.pm 204 2010-01-03 20:58:08Z cfuhrman $
+  $Id: Detailed.pm 241 2010-05-10 20:50:51Z cfuhrman $
 
 =head1 COPYRIGHT & LICENSE
 
