@@ -45,7 +45,7 @@ use base qw( Log::Fine::Handle );
 
 use File::Basename;
 use Log::Fine;
-use Sys::Syslog qw( :standard :macros );
+use Sys::Syslog 0.13 qw( :standard :macros );
 
 # Constant: LOG_MAPPING
 #
@@ -114,7 +114,7 @@ sub _init
 
         # set the default facility
         $self->{facility} = LOG_LOCAL0
-            unless (defined $self->{faciity}
+            unless (defined $self->{facility}
                     and $self->{facility} =~ /\w+/);
 
         # open the syslog connection
@@ -176,7 +176,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Syslog.pm 200 2010-01-03 20:20:44Z cfuhrman $
+  $Id: 9018464527a1c0a7215886f362a0c96166bf3dea $
 
 =head1 COPYRIGHT & LICENSE
 

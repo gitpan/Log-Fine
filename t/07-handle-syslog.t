@@ -1,10 +1,10 @@
 #!perl -T
 
 #
-# $Id: 07-handle-syslog.t 196 2010-01-03 19:30:43Z cfuhrman $
+# $Id: 650841a9b517fcac8885f93f387684ea9f1ad57d $
 #
 
-use Test::Simple tests => 7;
+use Test::Simple tests => 9;
 
 use File::Basename;
 
@@ -41,5 +41,12 @@ use Sys::Syslog qw( :standard :macros );
 
         # write a test message
         $handle->msgWrite(INFO, $msg, 1);
+
+        # Test with different facility
+        my $console = Log::Fine::Handle::Syslog->new(facility => LOG_CONSOLE);
+
+        # Validate
+        ok($console->isa("Log::Fine::Handle"));
+        ok($console->{facility} == LOG_CONSOLE);
 
 }

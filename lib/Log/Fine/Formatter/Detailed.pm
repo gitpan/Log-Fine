@@ -178,7 +178,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Detailed.pm 241 2010-05-10 20:50:51Z cfuhrman $
+  $Id: 5e5e0ef1f0349656a21d3c7afde3c1b584eec7dd $
 
 =head1 COPYRIGHT & LICENSE
 

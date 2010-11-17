@@ -289,7 +289,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Formatter.pm 241 2010-05-10 20:50:51Z cfuhrman $
+  $Id: 137aeeeb2b9bddf70b5c512ee3c919e4b0d25953 $
 
 =head1 COPYRIGHT & LICENSE
 

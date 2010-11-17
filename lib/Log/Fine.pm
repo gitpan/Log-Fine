@@ -82,7 +82,7 @@ use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.33';
+our $VERSION = '0.34';
 
 =head2 Formatters
 
@@ -142,10 +142,10 @@ L<Log::Fine::Formatter>.
 
 =head1 METHODS
 
-The Log::Fine module, by itself, simply exports a few constants, and
-allows the developer to get a new logger.  After a logger is created,
-further actions are done through the logger object.  The following two
-constructors are defined:
+The Log::Fine module, by itself, provides getters & setter methods for
+loggers and level classes.  After a logger is created, further actions
+are done through the logger object.  The following two constructors
+are defined:
 
 =head2 new
 
@@ -235,7 +235,7 @@ sub logger
         $self->_fatal("First parameter must be a valid name!")
             unless (defined $name and $name =~ /\w/);
 
-        # if the requested logger is found, then return it, otherwise
+        # If the requested logger is found, then return it, otherwise
         # store and return a newly created logger object with the
         # given name
         _logger()->{$name} = Log::Fine::Logger->new(name => $name)
@@ -393,7 +393,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Fine.pm 246 2010-08-28 18:04:13Z cfuhrman $
+  $Id: b3bbd8959455f00ddc3f176ba3a1b9756471817a $
 
 =head1 COPYRIGHT & LICENSE
 

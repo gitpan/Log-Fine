@@ -243,7 +243,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Handle.pm 241 2010-05-10 20:50:51Z cfuhrman $
+  $Id: 987f0391b999a2fdc2c9aa6d1d608050677daad3 $
 
 =head1 COPYRIGHT & LICENSE
 

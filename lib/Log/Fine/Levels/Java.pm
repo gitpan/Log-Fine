@@ -240,7 +240,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Java.pm 196 2010-01-03 19:30:43Z cfuhrman $
+  $Id: a11959b24a1d2826acb21d27f710daf641f68077 $
 
 =head1 COPYRIGHT & LICENSE
 

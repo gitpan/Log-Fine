@@ -327,7 +327,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Levels.pm 241 2010-05-10 20:50:51Z cfuhrman $
+  $Id: 43f9332c0fbf25f4f779945812b69466968262df $
 
 =head1 COPYRIGHT & LICENSE
 

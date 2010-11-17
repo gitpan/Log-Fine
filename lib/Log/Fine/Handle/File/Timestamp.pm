@@ -160,7 +160,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Timestamp.pm 227 2010-04-09 18:24:59Z cfuhrman $
+  $Id: d20338cd73faa205858eea313ee3ef7356f906eb $
 
 =head1 COPYRIGHT & LICENSE
 

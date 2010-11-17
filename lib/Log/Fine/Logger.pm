@@ -280,7 +280,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Logger.pm 203 2010-01-03 20:47:27Z cfuhrman $
+  $Id: 2a3079402eac9f67fb61c4dce50bff5f5bbf723d $
 
 =head1 COPYRIGHT & LICENSE
 

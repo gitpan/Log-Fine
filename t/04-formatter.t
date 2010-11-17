@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 04-formatter.t 223 2010-03-15 18:56:20Z cfuhrman $
+# $Id: afaef5e608b126d14b1efb6e7664ed514eed4fa8 $
 #
 
 use Test::More tests => 15;

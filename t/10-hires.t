@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 10-hires.t 196 2010-01-03 19:30:43Z cfuhrman $
+# $Id: fbebac7396d6f8259532f979431d96966cd2565e $
 #
 
 use Test::More;

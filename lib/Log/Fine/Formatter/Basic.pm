@@ -139,7 +139,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Basic.pm 204 2010-01-03 20:58:08Z cfuhrman $
+  $Id: 539059026507586a1c8595acff8621e1c0a1f468 $
 
 =head1 COPYRIGHT & LICENSE
 

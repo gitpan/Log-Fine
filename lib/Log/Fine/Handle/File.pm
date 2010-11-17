@@ -261,7 +261,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: File.pm 242 2010-07-05 18:34:49Z cfuhrman $
+  $Id: a84b73b64f92e309beef02fd544bec62d621c064 $
 
 =head1 COPYRIGHT & LICENSE
 

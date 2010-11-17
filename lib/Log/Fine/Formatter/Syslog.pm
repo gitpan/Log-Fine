@@ -146,7 +146,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Syslog.pm 214 2010-03-03 18:55:27Z cfuhrman $
+  $Id: 90d4042bf98974811cf4bd8b02d76d07d9ceb8b8 $
 
 =head1 COPYRIGHT & LICENSE
 

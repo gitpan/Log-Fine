@@ -1,8 +1,6 @@
-Last Modified: $Date: 2010-01-03 11:30:43 -0800 (Sun, 03 Jan 2010) $
+Last Modified: $Date$
 
  * Switch to Module::Build?
-
- * Document _fatal()
 
  * Have Utils handle more than one Logger?
 

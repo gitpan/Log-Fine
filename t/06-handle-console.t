@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 06-handle-console.t 196 2010-01-03 19:30:43Z cfuhrman $
+# $Id: 24e26021fb5f628e4fc6529f42008748b758bc62 $
 #
 
 use Test::More;

@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 05-handle-file.t 239 2010-05-09 20:35:07Z cfuhrman $
+# $Id: 455e45992d2e9206f802269cd8bdb06d96ef1ad2 $
 #
 
 use Test::Simple tests => 13;

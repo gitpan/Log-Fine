@@ -140,7 +140,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Console.pm 200 2010-01-03 20:20:44Z cfuhrman $
+  $Id: 0c2e24988059c23847668363bbf65cf1cd1a9eeb $
 
 =head1 COPYRIGHT & LICENSE
 

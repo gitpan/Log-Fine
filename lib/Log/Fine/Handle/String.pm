@@ -134,7 +134,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: String.pm 200 2010-01-03 20:20:44Z cfuhrman $
+  $Id: b9c559f2170532f6eb986d8d803ffef0f47471b8 $
 
 =head1 COPYRIGHT & LICENSE
 

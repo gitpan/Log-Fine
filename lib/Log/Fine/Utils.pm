@@ -234,7 +234,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: Utils.pm 228 2010-04-09 18:27:48Z cfuhrman $
+  $Id: cb4bc01911ff91d06d073dc7b766f67a3fbbed71 $
 
 =head1 COPYRIGHT & LICENSE
 

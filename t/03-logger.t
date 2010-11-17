@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 03-logger.t 234 2010-05-09 19:00:24Z cfuhrman $
+# $Id: 77538b3dcce1838cad7d27f94aa70c0dd441fd06 $
 #
 
 use Test::More tests => 11;
