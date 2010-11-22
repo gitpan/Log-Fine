@@ -176,7 +176,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 9018464527a1c0a7215886f362a0c96166bf3dea $
+  $Id: f8b8216e82a1923f993f047db480884f2ccad4ff $
 
 =head1 COPYRIGHT & LICENSE
 
