@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 0fde13723cb4ea0549c00d390ebd618461bee3ec $
+# $Id: 84eea2ed0b1b2dfcf1f051e9c8aa67cc3f3d1f2d $
 #
 
 use Test::Simple tests => 9;
@@ -42,11 +42,16 @@ use Sys::Syslog qw( :standard :macros );
         # write a test message
         $handle->msgWrite(INFO, $msg, 1);
 
-        # Test with different facility
-        my $console = Log::Fine::Handle::Syslog->new(facility => LOG_USER);
+        # Make sure we can't define more than one handle
+        eval {
+                open STDERR, '>/dev/null';
+                my $console =
+                    Log::Fine::Handle::Syslog->new(facility => LOG_USER,
+                                                   ident    => "badhandle");
+                close STDERR;
+        };
 
-        # Validate
-        ok($console->isa("Log::Fine::Handle"));
-        ok($console->{facility} == LOG_USER);
+        ok(defined $@);
+        ok($@ =~ /One and _only_ one/);
 
 }
