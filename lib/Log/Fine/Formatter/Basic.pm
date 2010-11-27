@@ -28,7 +28,7 @@ The basic formatter provides logging in the following format:
 
     <[TIMESTAMP] <LEVEL> <MESSAGE>>
 
-Please note that this is the default format.
+Note that this is the default format for L<Log::Fine::Handle> objects.
 
 =cut
 
@@ -42,6 +42,8 @@ use base qw( Log::Fine::Formatter );
 use Log::Fine;
 use Log::Fine::Formatter;
 use Log::Fine::Levels;
+
+our $VERSION = $Log::Fine::Formatter::VERSION;
 
 use POSIX qw( strftime );
 
@@ -139,7 +141,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 539059026507586a1c8595acff8621e1c0a1f468 $
+  $Id: abf8b0b8cf07bf8a50c0778f2d78094e655aac60 $
 
 =head1 COPYRIGHT & LICENSE
 

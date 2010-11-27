@@ -50,14 +50,16 @@ you would like milliseconds displayed within your format.  For example:
 
     $formatter->timeStamp("%H:%M:%S.%%millis%%");
 
-Please note you I<must> enable high resolution mode during Formatter
+Note you I<must> enable high resolution mode during Formatter
 construction as so:
 
     my $formatter = Log::Fine::Formatter::Basic->new( hires => 1 );
 
 By default, the time-stamp format for high resolution mode is
 "%H:%M:%S.%%millis%%".  This can be changed via the L</timeStamp>
-method or set during formatter construction.
+method or set during formatter construction.  "%%millis%%" is a case
+insensitive value, thus "%%MILLIS%%" will work as well as
+"%%Millis%%".
 
 =cut
 
@@ -70,6 +72,8 @@ use base qw( Log::Fine );
 
 use Log::Fine::Logger;
 use POSIX qw( strftime );
+
+our $VERSION = $Log::Fine::VERSION;
 
 # Constant: LOG_TIMESTAMP_FORMAT, LOG_TIMESTAMP_FORMAT_PRECISE
 #
@@ -191,7 +195,7 @@ sub _init
 
                 eval "require Time::HiRes";
                 $self->_fatal(
-"Time::HiRes failed to load.  Please install Time::HiRes via CPAN"
+"Time::HiRes failed to load.  Please install Time::HiRes via CPAN : $@"
                 ) if $@;
 
                 # set {timestamp_format} to default high precision
@@ -231,7 +235,7 @@ sub _formatTime
                 my @t = split /\./, $time;
 
                 # and format
-                $fmt =~ s/%%millis%%/$t[1]/g;
+                $fmt =~ s/%%millis%%/$t[1]/ig;
                 $seconds = $time;
 
         } else {
@@ -289,7 +293,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 137aeeeb2b9bddf70b5c512ee3c919e4b0d25953 $
+  $Id: 292ff1fe74caa0422e83503dd42eddf4f6767578 $
 
 =head1 COPYRIGHT & LICENSE
 
