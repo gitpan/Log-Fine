@@ -250,7 +250,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 9a5328ae92d6ce8b732a1621fb5998166951250d $
+  $Id: 964b302cde626ecc7ce096431c3a04b8efadebb5 $
 
 =head1 COPYRIGHT & LICENSE
 

@@ -19,7 +19,10 @@ Formats log messages for output in a detailed format.
                timestamp_format => "%y-%m-%d %h:%m:%s" );
 
     # set the formatter
-    $handle->setFormatter( formatter => $formatter );
+    $handle->formatter( formatter => $formatter );
+
+    # format a msg
+    my $str = $formatter->format(INFO, "Resistence is futile", 1);
 
 =head1 DESCRIPTION
 
@@ -180,7 +183,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 5e5e0ef1f0349656a21d3c7afde3c1b584eec7dd $
+  $Id: 5bbde0fdb860a40d412688c98cbef5e1d78cdcc2 $
 
 =head1 COPYRIGHT & LICENSE
 

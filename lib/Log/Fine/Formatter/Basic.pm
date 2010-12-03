@@ -20,7 +20,10 @@ applications.
                timestamp_format => "%y-%m-%d %h:%m:%s" );
 
     # set the formatter
-    $handle->setFormatter( formatter => $formatter );
+    $handle->formatter( formatter => $formatter );
+
+    # format a msg
+    my $str = $formatter->format(INFO, "Resistence is futile", 1);
 
 =head1 DESCRIPTION
 
@@ -141,7 +144,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: abf8b0b8cf07bf8a50c0778f2d78094e655aac60 $
+  $Id: 2f1c779d747ee842fb36148f10076fd6fa875eb1 $
 
 =head1 COPYRIGHT & LICENSE
 

@@ -18,7 +18,10 @@ Formats messages in a style similar to syslog(1)
         ->new( name             => 'syslog0');
 
     # set the formatter
-    $handle->setFormatter( formatter => $formatter );
+    $handle->formatter( formatter => $formatter );
+
+    # format a msg
+    my $str = $formatter->format(INFO, "Resistence is futile", 1);
 
 =head1 DESCRIPTION
 
@@ -50,7 +53,9 @@ our $VERSION = $Log::Fine::Formatter::VERSION;
 # Constant: LOG_TIMESTAMP_FORMAT
 #
 # strftime(3)-compatible format string
-use constant LOG_TIMESTAMP_FORMAT => "%b %e %T";
+use constant LOG_TIMESTAMP_FORMAT => ($^O eq "MSWin32")
+    ? "%b %d %H:%M:%S"
+    : "%b %e %T";
 
 =head1 METHODS
 
@@ -148,7 +153,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 90d4042bf98974811cf4bd8b02d76d07d9ceb8b8 $
+  $Id: 7d0452f38f78b2b7396db1cfbeb48a5648afad7b $
 
 =head1 COPYRIGHT & LICENSE
 

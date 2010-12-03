@@ -116,7 +116,7 @@ sub Log
         croak(
                sprintf("[%s] FATAL : %s\n",
                        strftime("%c", localtime(time)),
-"Logging system has not been set up.  (See Log::Fine::Utils::OpenLog()"
+"Logging system has not been set up.  (See Log::Fine::Utils::OpenLog())"
                )) unless (defined $log and $log->isa("Log::Fine::Logger"));
 
         # make sure we log the correct calling method
@@ -236,7 +236,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: cb4bc01911ff91d06d073dc7b766f67a3fbbed71 $
+  $Id: cd66a9fca7c3bd0bfd65be21f030eafc1930fd32 $
 
 =head1 COPYRIGHT & LICENSE
 
