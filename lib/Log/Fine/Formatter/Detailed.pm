@@ -52,6 +52,7 @@ use Log::Fine;
 use Log::Fine::Formatter;
 use Log::Fine::Levels;
 use Log::Fine::Logger;
+
 use POSIX qw( strftime );
 
 our $VERSION = $Log::Fine::Formatter::VERSION;
@@ -132,7 +133,7 @@ sub format
             sprintf("[%s] %-4s (%s():%d) %s\n",
                     $self->_formatTime(),
                     $self->levelMap()->valueToLevel($lvl),
-                    $c[3] || "{undef}",
+                    (caller($skip + 1))[3] || "{undef}",
                     $c[2] || 0, $msg);
 
 }          # format()
@@ -183,7 +184,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 5bbde0fdb860a40d412688c98cbef5e1d78cdcc2 $
+  $Id: 12902984e48dc8237a53d1268a8b163107f00006 $
 
 =head1 COPYRIGHT & LICENSE
 

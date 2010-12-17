@@ -62,6 +62,7 @@ use Log::Fine::Levels;
 
 our $VERSION = $Log::Fine::Formatter::VERSION;
 
+#use Data::Dumper;
 use File::Basename;
 use Sys::Hostname;
 
@@ -130,19 +131,17 @@ sub format
         my $self = shift;
         my $lvl  = shift;
         my $msg  = shift;
-        my $skip = shift;
+        my $skip =
+            (defined $_[0]) ? $_[0] : Log::Fine::Logger->LOG_SKIP_DEFAULT;
         my $tmpl = $self->{template};
 
-        # Set skip to default if need be
-        $skip = Log::Fine::Logger->LOG_SKIP_DEFAULT unless defined $skip;
+        # Get the caller information
+        my @c = caller($skip);
 
-        # get the caller information
-        my @c         = caller($skip);
-        my @subr      = split /::/, $c[3] || "main()";
         my $now       = $self->_formatTime();
         my $lname     = $self->levelMap()->valueToLevel($lvl);
-        my $subname   = pop @subr || "{undef}";
-        my $package   = join "::", @subr;
+        my $subname   = (caller($skip + 1))[3] || "main";
+        my $package   = $c[0] || "{undef}";
         my $filename  = $self->_fileName();
         my $lineno    = $c[2] || 0;
         my $hostname  = $self->_hostName();
@@ -243,11 +242,13 @@ sub _groupName
         if (defined $self->{_groupName} and $self->{_groupName} =~ /\w/) {
                 return $self->{_groupName};
         } elsif ($self->{use_effective_id}) {
-                $self->{_groupName} = ($^O eq "MSWin32")
+                $self->{_groupName} =
+                    ($^O eq "MSWin32")
                     ? $ENV{EGID}   || 0
                     : getgrgid($)) || "nogroup";
         } else {
-                $self->{_groupName} = ($^O eq "MSWin32")
+                $self->{_groupName} =
+                    ($^O eq "MSWin32")
                     ? $ENV{GID} || 0
                     : getgrgid($() || "nogroup";
         }
@@ -292,7 +293,8 @@ sub _userName
         if (defined $self->{_userName} and $self->{_userName} =~ /\w/) {
                 return $self->{_userName};
         } elsif ($self->{use_effective_id}) {
-                $self->{_userName} = ($^O eq "MSWin32")
+                $self->{_userName} =
+                    ($^O eq "MSWin32")
                     ? $ENV{EUID}   || 0
                     : getpwuid($>) || "nobody";
         } else {
@@ -369,7 +371,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 460db580085c39a34f20d3c8aebe4f067ebf630c $
+  $Id: 9a16632622a4154be741ab4e4ec9680f499661ea $
 
 =head1 COPYRIGHT & LICENSE
 

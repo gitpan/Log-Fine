@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 6b8e898a9d0c9937c74007de26756bc1daf1a157 $
+# $Id: 22f7c7589e3ee123c2aa2e445d5bf9daa2012dbe $
 #
 
 use Test::More tests => 15;
@@ -56,15 +56,21 @@ use Log::Fine::Levels::Syslog;
 
         ok($log2 =~ /^\[.*?\] \w+ \(.*?\) $msg/);
 
+        #print STDERR "\n$log2\n";
+
         my $log3 = myfunc($detailed, $msg);
 
         ok($log3 =~ /^\[.*?\] \w+ \(.*?\:\d+\) $msg/);
 
+        #print STDERR "\n$log3\n";
+
         my $log4 = $detailed->testFormat(INFO, $msg);
 
         ok($log4 =~
-/^\[.*?\] \w+ \(Log\:\:Fine\:\:Formatter\:\:Detailed\:\:format\(\)\:\d+\) $msg/
+/^\[.*?\] \w+ \(Log\:\:Fine\:\:Formatter\:\:testFormat\(\)\:\d+\) $msg/
         );
+
+        #print STDERR "\n$log4\n";
 
         # now create a syslog formatter
         my $syslog = Log::Fine::Formatter::Syslog->new();

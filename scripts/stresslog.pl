@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 #
-# $Id: f627466574572dd7c7c93cb1a4b07b96edcb340b $
+# $Id$
 #
 
 use strict;
