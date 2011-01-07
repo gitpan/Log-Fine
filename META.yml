@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Log-Fine
-version:             0.50.0
+version:             0.50
 abstract:            Yet another logging framework
 license:             ~
 author:              

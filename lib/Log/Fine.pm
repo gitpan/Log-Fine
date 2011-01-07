@@ -82,7 +82,7 @@ use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.50.0';
+our $VERSION = '0.50';
 
 =head2 Formatters
 
@@ -416,7 +416,7 @@ L<via email|/AUTHOR>.
 
 =head1 REVISION INFORMATION
 
-  $Id: 5b46eda62bb663c4164c6c165e571b660da7f285 $
+  $Id: 8961739e989b9ecbbe7ca35198a00cb3f74f62d7 $
 
 =head1 COPYRIGHT & LICENSE
 
