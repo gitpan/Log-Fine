@@ -21,6 +21,9 @@ Provides fine-grained logging and tracing.
     # defined then a new logger with the name "foo" will be created.
     my $log = Log::Fine->logger("foo");
 
+    # get list of names of defined logger objects
+    my @loggers = $log->listLoggers();
+
     # register a handle, in this case a handle that logs to console.
     my $handle = Log::Fine::Handle::Console->new();
     $log->registerHandle( $handle );
@@ -82,7 +85,7 @@ use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.50';
+our $VERSION = '0.51';
 
 =head2 Formatters
 
@@ -191,6 +194,22 @@ sub new
         return $self;
 
 }          # new()
+
+=head2 listLoggers
+
+Provides list of currently defined loggers
+
+=head3 Parameters
+
+None
+
+=head3 Returns
+
+Array containing list of currently defined loggers
+
+=cut
+
+sub listLoggers { return keys %{ _logger() } }
 
 =head2 levelMap
 
@@ -358,15 +377,6 @@ The Python logging package
 
 =back
 
-=head1 SEE ALSO
-
-L<perl>, L<syslog>, L<Log::Fine::Handle>, L<Log::Fine::Formatter>,
-L<Log::Fine::Logger>, L<Log::Fine::Utils>, L<Sys::Syslog>
-
-=head1 AUTHOR
-
-Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
-
 =head1 BUGS
 
 Please report any bugs or feature requests to
@@ -416,7 +426,16 @@ L<via email|/AUTHOR>.
 
 =head1 REVISION INFORMATION
 
-  $Id: 8961739e989b9ecbbe7ca35198a00cb3f74f62d7 $
+  $Id: f72db4826f7b2cf254e5a790379c069b130881f8 $
+
+=head1 AUTHOR
+
+Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
+
+=head1 SEE ALSO
+
+L<perl>, L<syslog>, L<Log::Fine::Handle>, L<Log::Fine::Formatter>,
+L<Log::Fine::Logger>, L<Log::Fine::Utils>, L<Sys::Syslog>
 
 =head1 COPYRIGHT & LICENSE
 

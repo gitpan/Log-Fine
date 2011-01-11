@@ -199,14 +199,6 @@ sub _init
 
 }          # _init()
 
-=head1 SEE ALSO
-
-L<perl>, L<Log::Fine>, L<Log::Fine::Formatter>
-
-=head1 AUTHOR
-
-Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
-
 =head1 BUGS
 
 Please report any bugs or feature requests to
@@ -245,7 +237,15 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 987f0391b999a2fdc2c9aa6d1d608050677daad3 $
+  $Id: cb3e7dd083418c29ae2f615108a236f8f40a8a29 $
+
+=head1 AUTHOR
+
+Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
+
+=head1 SEE ALSO
+
+L<perl>, L<Log::Fine>, L<Log::Fine::Formatter>
 
 =head1 COPYRIGHT & LICENSE
 

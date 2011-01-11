@@ -204,14 +204,6 @@ sub AUTOLOAD
 
 }          # AUTOLOAD()
 
-=head1 SEE ALSO
-
-L<perl>, L<syslog>, L<Log::Fine>, L<Log::Fine::Levels>, L<Sys::Syslog>
-
-=head1 AUTHOR
-
-Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
-
 =head1 BUGS
 
 Please report any bugs or feature requests to
@@ -250,7 +242,15 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 9a5328ae92d6ce8b732a1621fb5998166951250d $
+  $Id: a6095dff62ce5f0a8d862c82528b862b743af8e7 $
+
+=head1 AUTHOR
+
+Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
+
+=head1 SEE ALSO
+
+L<perl>, L<syslog>, L<Log::Fine>, L<Log::Fine::Levels>, L<Sys::Syslog>
 
 =head1 COPYRIGHT & LICENSE
 

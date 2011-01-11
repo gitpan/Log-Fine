@@ -98,14 +98,6 @@ sub format
 
 }          # format()
 
-=head1 SEE ALSO
-
-L<perl>, L<Log::Fine::Formatter>
-
-=head1 AUTHOR
-
-Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
-
 =head1 BUGS
 
 Please report any bugs or feature requests to
@@ -144,7 +136,15 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 2f1c779d747ee842fb36148f10076fd6fa875eb1 $
+  $Id: 5ddce26071be618218a4820d0c95e2c301fb02a4 $
+
+=head1 AUTHOR
+
+Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
+
+=head1 SEE ALSO
+
+L<perl>, L<Log::Fine::Formatter>
 
 =head1 COPYRIGHT & LICENSE
 

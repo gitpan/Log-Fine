@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 22f7c7589e3ee123c2aa2e445d5bf9daa2012dbe $
+# $Id: 877bae3f98edfd1b107de0f95413d922a64f1b1a $
 #
 
 use Test::More tests => 15;
@@ -104,7 +104,7 @@ use Log::Fine::Levels::Syslog;
         # reporting.
 
         if ($log5 =~
-/^([ 1]\d\S+|[^ ]+) [ 0-3][0-9] \d{2}:\d{2}:\d{2} [0-9a-zA-Z\-]+ .*?\[\d+\]: $msg/
+/^\s*([ 1]\d\S+|[^ ]+) [ 0-3][0-9] \d{2}:\d{2}:\d{2} [0-9a-zA-Z\-]+ .*?\[\d+\]: $msg/
             ) {
                 ok(1);
         } else {

@@ -284,14 +284,6 @@ sub valueToLevel
 
 }          # valueToLevel()
 
-=head1 SEE ALSO
-
-L<perl>, L<syslog>, L<Log::Fine>, L<Sys::Syslog>
-
-=head1 AUTHOR
-
-Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
-
 =head1 BUGS
 
 Please report any bugs or feature requests to
@@ -330,7 +322,15 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 43f9332c0fbf25f4f779945812b69466968262df $
+  $Id: 18a375bed498e68eaff5ed39bae1432cec95bc9b $
+
+=head1 AUTHOR
+
+Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
+
+=head1 SEE ALSO
+
+L<perl>, L<syslog>, L<Log::Fine>, L<Sys::Syslog>
 
 =head1 COPYRIGHT & LICENSE
 

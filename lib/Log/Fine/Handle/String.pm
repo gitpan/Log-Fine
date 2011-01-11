@@ -90,14 +90,6 @@ sub msgWrite
 
 }          # msgWrite()
 
-=head1 SEE ALSO
-
-L<perl>, L<Log::Fine>, L<Log::Fine::Handle>
-
-=head1 AUTHOR
-
-Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
-
 =head1 BUGS
 
 Please report any bugs or feature requests to
@@ -136,7 +128,15 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: b9c559f2170532f6eb986d8d803ffef0f47471b8 $
+  $Id: 8fb352f52b7a59533d3ff582d7f919b0db886550 $
+
+=head1 AUTHOR
+
+Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
+
+=head1 SEE ALSO
+
+L<perl>, L<Log::Fine>, L<Log::Fine::Handle>
 
 =head1 COPYRIGHT & LICENSE
 

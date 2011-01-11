@@ -152,14 +152,6 @@ sub _init
 
 sub DESTROY { closelog(); }
 
-=head1 SEE ALSO
-
-L<perl>, L<syslog>, L<Sys::Syslog>
-
-=head1 AUTHOR
-
-Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
-
 =head1 BUGS
 
 Please report any bugs or feature requests to
@@ -198,7 +190,15 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 702363086ed67656b75b353e081284433cb242cf $
+  $Id: c3d08d128e127c6efd71eb2184cc35de3f6eec5e $
+
+=head1 AUTHOR
+
+Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
+
+=head1 SEE ALSO
+
+L<perl>, L<syslog>, L<Sys::Syslog>
 
 =head1 COPYRIGHT & LICENSE
 

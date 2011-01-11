@@ -379,14 +379,6 @@ environment variables for determining user and group information:
 
 Under MS Windows, these values will invariably be set to 0.
 
-=head1 SEE ALSO
-
-L<perl>, L<Log::Fine::Formatter>
-
-=head1 AUTHOR
-
-Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
-
 =head1 BUGS
 
 Please report any bugs or feature requests to
@@ -425,7 +417,15 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: f78a096ee27dd4cb9ce072d059118bfa1383cc64 $
+  $Id: 5b079d0640398cf224bd56ad44af44e939521f13 $
+
+=head1 AUTHOR
+
+Christopher M. Fuhrman, C<< <cfuhrman at panix.com> >>
+
+=head1 SEE ALSO
+
+L<perl>, L<Log::Fine::Formatter>
 
 =head1 COPYRIGHT & LICENSE
 
