@@ -1,17 +1,22 @@
 --- #YAML:1.0
 name:               Log-Fine
-version:            0.51
+version:            0.52
 abstract:           Yet another logging framework
 author:
     - Christopher M. Fuhrman <cfuhrman@panix.com>
-license:            unknown
+license:            bsd
 distribution_type:  module
 configure_requires:
     ExtUtils::MakeMaker:  0
 build_requires:
     ExtUtils::MakeMaker:  0
 requires:
-    Test::More:  0
+    Sys::Syslog:  0.13
+    Test::More:   0
+resources:
+    bugtracker:  http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine
+    license:     https://github.com/cfuhrman/log-fine/raw/master/LICENSE
+    repository:  https://github.com/cfuhrman/log-fine
 no_index:
     directory:
         - t
@@ -20,3 +25,8 @@ generated_by:       ExtUtils::MakeMaker version 6.56
 meta-spec:
     url:      http://module-build.sourceforge.net/META-spec-v1.4.html
     version:  1.4
+recommends:
+    Pod::Coverage:  0.19
+    Test::Output:   0.1
+    Test::Pod:      1.14
+    Time::HiRes:    1.86

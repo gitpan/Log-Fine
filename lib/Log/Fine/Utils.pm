@@ -29,12 +29,12 @@ Provides a functional wrapper around Log::Fine.
 
     # open the logging subsystem with the default name "GENERIC"
     OpenLog( handles  => [ $handle1, [$handle2], ... ],
-             levelmap => "Syslog");
+             levelmap => "Syslog" );
 
     # Open new logging object with name "aux"
     OpenLog( name => "aux",
              handles  => [ $handle1, [$handle2], ... ],
-             levelmap => "Syslog");
+             levelmap => "Syslog" );
 
     # Switch back to GENERIC logger
     OpenLog( name => "GENERIC" );
@@ -119,7 +119,7 @@ loggers are defined
 sub ListLoggers
 {
         return (defined _logfine()) ? _logfine()->listLoggers() : ();
-}          # ListLoggers()
+}
 
 =head2 Log
 
@@ -297,7 +297,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 2c27df05523df2466dae7c3a016aa8329bd1aaa3 $
+  $Id: 5714c11d90c37ba9cd5ad69e125dc4f9d361de28 $
 
 =head1 AUTHOR
 
