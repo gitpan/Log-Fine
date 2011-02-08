@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Log-Fine
-version:            0.52
+version:            0.53
 abstract:           Yet another logging framework
 author:
     - Christopher M. Fuhrman <cfuhrman@panix.com>
