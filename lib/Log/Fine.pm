@@ -85,7 +85,7 @@ use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.531';
+our $VERSION = '0.54';
 
 =head2 Formatters
 
@@ -275,6 +275,22 @@ sub logger
 
 }          # logger()
 
+=head2 name
+
+Getter for name of object
+
+=head3 Parameters
+
+None
+
+=head3 Returns
+
+String containing name of object, otherwise undef
+
+=cut
+
+sub name { return $_[0]->{name} || undef }
+
 # --------------------------------------------------------------------
 
 =head2 _fatal
@@ -318,9 +334,10 @@ sub _fatal
             $msg || "No reason given";
 
         croak $msg
-            unless (    defined $self
-                    and $self->isa("Log::Fine")
-                    and $self->{no_croak});
+            if ((    defined $self
+                 and $self->isa("Log::Fine")
+                 and not $self->{no_croak})
+                or (not defined $self));
 
 }          # _fatal()
 
@@ -435,7 +452,7 @@ L<via email|/AUTHOR>.
 
 =head1 REVISION INFORMATION
 
-  $Id: 0f8a94f2abbda351e297f945dcdd76e58c741c41 $
+  $Id: 234dd29fd84ffc1a4dcabf135f35c958813b0af7 $
 
 =head1 AUTHOR
 

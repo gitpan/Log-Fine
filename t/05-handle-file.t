@@ -1,10 +1,10 @@
 #!perl -T
 
 #
-# $Id: 455e45992d2e9206f802269cd8bdb06d96ef1ad2 $
+# $Id: 12e45112ac8bc95ff789d3fbe2405f3f66bdb9f6 $
 #
 
-use Test::Simple tests => 13;
+use Test::Simple tests => 15;
 
 use File::Spec::Functions;
 use FileHandle;
@@ -24,6 +24,7 @@ use Log::Fine::Logger;
         my $log = Log::Fine->logger("handlefile0");
 
         ok(ref $log eq "Log::Fine::Logger");
+        ok($log->name() =~ /\w\d+$/);
 
         # add a handle.  Note we use the default formatter.
         my $handle =
@@ -32,6 +33,7 @@ use Log::Fine::Logger;
 
         # do some validation
         ok($handle->isa("Log::Fine::Handle"));
+        ok($handle->name() =~ /\w\d+$/);
 
         # these should be set to their default values
         ok($handle->{mask} == $handle->levelMap()->bitmaskAll());

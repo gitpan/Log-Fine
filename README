@@ -127,6 +127,15 @@ METHODS
     Returns
     an Log::Fine::Logger object
 
+  name
+    Getter for name of object
+
+    Parameters
+    None
+
+    Returns
+    String containing name of object, otherwise undef
+
   _fatal
     Private method that is called when a fatal (nonrecoverable) condition is
     encountered. Will call croak unless the {no_croak} attribute is set. For
@@ -192,7 +201,7 @@ CONTRIBUTING
     email.
 
 REVISION INFORMATION
-      $Id: c07a004fee8c9f74dbdb718f1d8708783bfe6527 $
+      $Id: 234dd29fd84ffc1a4dcabf135f35c958813b0af7 $
 
 AUTHOR
     Christopher M. Fuhrman, `<cfuhrman at panix.com>'

@@ -36,11 +36,20 @@ Provides a functional wrapper around Log::Fine.
              handles  => [ $handle1, [$handle2], ... ],
              levelmap => "Syslog" );
 
+    # Grab a ref to active logger
+    my $current_logger = CurrentLogger();
+
+    # Get name of current logger
+    my $loggername = $current_logger->name();
+
     # Switch back to GENERIC logger
     OpenLog( name => "GENERIC" );
 
+    # Grab a list of defined logger names
+    my @names = ListLoggers();
+
     # Log a message
-    Log(INFO, "The angels have my blue box");
+    Log( INFO, "The angels have my blue box" );
 
 =head1 DESCRIPTION
 
@@ -57,7 +66,7 @@ package Log::Fine::Utils;
 
 our @ISA = qw( Exporter );
 
-use Data::Dumper;
+#use Data::Dumper;
 
 use Log::Fine;
 use Log::Fine::Levels;
@@ -66,15 +75,15 @@ use Log::Fine::Logger;
 our $VERSION = $Log::Fine::VERSION;
 
 # Exported functions
-our @EXPORT = qw( ListLoggers Log OpenLog );
+our @EXPORT = qw( CurrentLogger ListLoggers Log OpenLog );
 
 # Private Functions
 # --------------------------------------------------------------------
 
 {
 
-        my $logfine;
-        my $logname;
+        my $logfine;          # Log::Fine object
+        my $logger;           # Ptr to current logger
 
         # Getter/Setter for Log::Fine object
         sub _logfine
@@ -85,13 +94,13 @@ our @EXPORT = qw( ListLoggers Log OpenLog );
                 return $logfine;
         }
 
-        # getter/setter for logger name
-        sub _logname
+        # Getter/Setter for current logger
+        sub _logger
         {
-                $logname = $_[0]
-                    if (defined $_[0] and $_[0] =~ /\w/);
+                $logger = $_[0]
+                    if (defined $_[0] and $_[0]->isa("Log::Fine::Logger"));
 
-                return $logname;
+                return $logger;
         }
 
 }
@@ -100,6 +109,22 @@ our @EXPORT = qw( ListLoggers Log OpenLog );
 
 The following functions are automatically exported by
 Log::Fine::Utils:
+
+=head2 CurrentLogger
+
+Returns the currently "active" L<Log::Fine::Logger> object
+
+=head3 Parameters
+
+None
+
+=head3 Returns
+
+Currently active L<Log::Fine::Logger> object
+
+=cut
+
+sub CurrentLogger { return _logger() }
 
 =head2 ListLoggers
 
@@ -150,7 +175,7 @@ sub Log
 
         my $lvl = shift;
         my $msg = shift;
-        my $log = _logfine->logger(_logname());
+        my $log = _logger();
 
         # validate logger has been set
         Log::Fine->_fatal(  "Logging system has not been set up "
@@ -193,6 +218,11 @@ B<[optional]> Name of logger.  If name is defined, will switch
 internal logger to given name, otherwise, creates a new logger and
 switches to that
 
+=item * no_croak
+
+[default: 0] If true, Log::Fine will not croak under certain
+circumstances (see L<Log::Fine>)
+
 =back
 
 =head3 Returns
@@ -214,43 +244,39 @@ sub OpenLog
         _logfine(
                  Log::Fine->new(name     => "Utils",
                                 levelmap => $data{levelmap}
-                                    || Log::Fine::Levels->DEFAULT_LEVELMAP
+                                    || Log::Fine::Levels->DEFAULT_LEVELMAP,
+                                no_croak => $data{no_croak} || 0
                  )
         ) unless (defined _logfine() and _logfine()->isa("Log::Fine"));
 
-        # See if logger specified by name is already defined
+        # See if the given logger name is already defined
         if (     defined _logfine()
-             and defined _logname()
-             and _logfine->isa("Log::Fine")
-             and _logname() =~ /\w/
+             and defined _logger()
+             and _logfine()->isa("Log::Fine")
+             and _logger->isa("Log::Fine::Logger")
+             and (_logger->name() =~ /\w/)
              and grep(/$data{name}/, ListLoggers())) {
-                _logname($data{name});
-                return 1;
+
+                # set the current logger to the given name
+                _logger(_logfine->logger($data{name}));
+
         } elsif (   not defined $data{handles}
                  or ref $data{handles} ne "ARRAY"
                  or scalar @{ $data{handles} } == 0) {
 
+                # No Log::Fine::Handle objects are defined
                 Log::Fine->_fatal("At least one handle must be defined");
                 return undef;          # in case {no_croak} option given
 
         } else {
 
-                # create logger
-                my $logger = _logfine->logger($data{name});
-
-                # register given handles
-                $logger->registerHandle($_) foreach @{ $data{handles} };
-
-                # Set logger name
-                _logname($data{name});
-
-                return 1;
+                # Instantiate a new Log::Fine::Logger object and store
+                _logger(_logfine->logger($data{name}));
+                _logger->registerHandle($_) foreach @{ $data{handles} };
 
         }
 
-        #
-        # NOT REACHED
-        #
+        return 1;
 
 }          # OpenLog()
 
@@ -261,6 +287,21 @@ C<bug-log-fine-utils at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
+
+=head1 CAVEATS
+
+OpenLog() will croak regardless if C<{no_croak}> is set if the
+following two conditions are met:
+
+=over
+
+=item * OpenLog() is passed the name of an unknown logger, thus
+necessitating the creation of a new logger object
+
+=item * No L<Log::Fine::Handle> objects were passed in the
+C<{handles}> array
+
+=back
 
 =head1 SUPPORT
 
@@ -292,7 +333,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 0d81cd5f194003636787160e90fac4b2c0958735 $
+  $Id: ff0cfe95e552a213685a6a81ec6d148fb3cbad3d $
 
 =head1 AUTHOR
 

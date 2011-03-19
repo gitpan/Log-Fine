@@ -154,7 +154,7 @@ Passed to L<caller|perlfunc/caller> for accurate method logging
 
 =head3 Returns
 
-none
+None
 
 =cut
 
@@ -237,7 +237,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: cb3e7dd083418c29ae2f615108a236f8f40a8a29 $
+  $Id: ceeaed722a4a9ecf8b42cf72ee36bdc0e3f84c7c $
 
 =head1 AUTHOR
 

@@ -1,10 +1,10 @@
 #!perl -T
 
 #
-# $Id: 8e43b8b8fe16e995c73586974d13e7acd95b1bb1 $
+# $Id: e2ff198c7f5670267557151438a4fdf8d21ae0da $
 #
 
-use Test::Simple tests => 11;
+use Test::Simple tests => 15;
 
 use File::Spec::Functions;
 use FileHandle;
@@ -32,6 +32,7 @@ use Log::Fine::Utils;
 
         # Make sure there are no loggers defined
         ok(not defined ListLoggers() or scalar ListLoggers() == 0);
+        ok(not defined CurrentLogger());
 
         # open the logging sub-system
         OpenLog(handles  => [$handle],
@@ -40,6 +41,7 @@ use Log::Fine::Utils;
         # Should be one logger defined now
         ok(scalar ListLoggers() == 1);
         ok(grep("GENERIC", ListLoggers()));
+        ok(CurrentLogger()->name() eq "GENERIC");
 
         #print STDERR "\n1) About to log\n\n";
 
@@ -71,6 +73,7 @@ use Log::Fine::Utils;
 
         ok(scalar ListLoggers() == 2);
         ok(grep("UNITTEST", ListLoggers()));
+        ok(CurrentLogger()->name() eq "UNITTEST");
 
         # print STDERR "\n2) About to log\n\n";
 
@@ -79,6 +82,7 @@ use Log::Fine::Utils;
 
         # Switch back to generic logger
         OpenLog(name => "GENERIC");
+        ok(CurrentLogger()->name() eq "GENERIC");
 
         # print STDERR "\n3) About to log\n\n";
 

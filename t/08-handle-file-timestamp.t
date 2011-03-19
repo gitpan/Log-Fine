@@ -1,10 +1,10 @@
 #!perl -T
 
 #
-# $Id: 75e829caa3326677dded4b5c739ab00cd8d34879 $
+# $Id: 6d14bda4ac050689bf4cddf64c0c471e1c7cef5b $
 #
 
-use Test::Simple tests => 10;
+use Test::Simple tests => 11;
 
 use File::Spec::Functions;
 
@@ -27,6 +27,7 @@ use POSIX qw( strftime );
 
         # do some validation
         ok($handle->isa("Log::Fine::Handle"));
+        ok($handle->name() =~ /\w\d+$/);
 
         # these should be set to their default values
         ok($handle->{mask} == $handle->levelMap()->bitmaskAll());

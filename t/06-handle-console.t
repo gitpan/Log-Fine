@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 24e26021fb5f628e4fc6529f42008748b758bc62 $
+# $Id: 4506e919842e18351284e60641ac4fb865532858 $
 #
 
 use Test::More;
@@ -26,16 +26,20 @@ my $handle = Log::Fine::Handle::Console->new();
                 plan skip_all =>
 "Test::Output 0.10 or above required for testing Console output";
         } else {
-                plan tests => 8;
+                plan tests => 11;
         }
+
+        ok($handle->name() =~ /\w\d+$/);
 
         # get a logger
         my $log = Log::Fine->logger("handleconsole0");
 
         ok(ref $log eq "Log::Fine::Logger");
+        ok($log->name() =~ /\w\d+$/);
 
         # do some validation
         ok($handle->isa("Log::Fine::Handle"));
+        ok($handle->name() =~ /\w\d+$/);
 
         # these should be set to their default values
         ok($handle->{mask} == $handle->levelMap()->bitmaskAll());
