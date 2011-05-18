@@ -17,6 +17,9 @@ Provides fine-grained logging and tracing.
     # specify a custom map
     my $fine = Log::Fine->new(levelmap => "Syslog");
 
+    # Get the name of the log object
+    my $name = $fine->name();
+
     # use logger() to get a new logger object.  If "foo" is not
     # defined then a new logger with the name "foo" will be created.
     my $log = Log::Fine->logger("foo");
@@ -85,7 +88,7 @@ use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.54';
+our $VERSION = '0.55';
 
 =head2 Formatters
 
@@ -352,7 +355,7 @@ sub _init
         # increment object count
         _incrObjectCount();
 
-        # we set the object's name unless it is already set for us
+        # we set the objects name unless it is already set for us
         unless (defined $self->{name} and $self->{name} =~ /\w/) {
 
                 # grab the class name
@@ -452,7 +455,7 @@ L<via email|/AUTHOR>.
 
 =head1 REVISION INFORMATION
 
-  $Id: 234dd29fd84ffc1a4dcabf135f35c958813b0af7 $
+  $Id: 74a9a78fe2c62d8b703bc2055d7fad32a9180fc4 $
 
 =head1 AUTHOR
 

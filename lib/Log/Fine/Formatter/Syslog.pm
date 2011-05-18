@@ -15,7 +15,7 @@ Formats messages in a style similar to syslog(1)
 
     # instantiate a formatter
     my $formatter = Log::Fine::Formatter::Syslog
-        ->new( name             => 'syslog0');
+        ->new( name => 'syslog0');
 
     # set the formatter
     $handle->formatter( formatter => $formatter );
@@ -28,7 +28,7 @@ Formats messages in a style similar to syslog(1)
 The syslog formatter logs messages in a format similar to that
 produced by syslog(1).
 
-    <Mon> <Day> <HH:MM:SS> <Hostname> <ProcessName>[<ProcessID>]: <Message>>
+    <Mon> <Day> <HH:MM:SS> <Hostname> <ProcessName>[<ProcessID>]: <Message>
 
 =cut
 
@@ -145,7 +145,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 757771a2a0d06ecf71137e543e61170b0e1319d5 $
+  $Id: 9761b376b45e2a1cc9b63e5ac2f63c8ea8c639fa $
 
 =head1 AUTHOR
 

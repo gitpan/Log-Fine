@@ -89,7 +89,7 @@ as C<%%MSG%%>
     +---------------+-----------------------------------+
     | %%HOSTSHORT%% | Short Hostname                    |
     +---------------+-----------------------------------+
-    | %$%LOGIN%%    | User Login                        |
+    | %%LOGIN%%     | User Login                        |
     +---------------+-----------------------------------+
     | %%GROUP%%     | User Group                        |
     +---------------+-----------------------------------+
@@ -417,7 +417,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 5b079d0640398cf224bd56ad44af44e939521f13 $
+  $Id: 629b9aea8554c845762c6ae1f7d6861c7a3117bc $
 
 =head1 AUTHOR
 

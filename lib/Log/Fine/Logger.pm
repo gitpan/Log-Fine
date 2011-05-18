@@ -196,7 +196,7 @@ See L<perlfunc/caller> for details
 
 =head3 Returns
 
-The object's skip attribute
+The objects skip attribute
 
 =cut
 
@@ -274,7 +274,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 4c0adbddb9d580d7ff6cd27387d8e4d19d6727df $
+  $Id: 127903180f3b98bf23dd379f25bf110fc0e8b435 $
 
 =head1 AUTHOR
 

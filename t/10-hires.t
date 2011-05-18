@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: b1e6c86e6208d7657bf09ea51910b268372e6b40 $
+# $Id: 09bcb92df105adec4d86bbbd3a5a2bb3814fcf36 $
 #
 
 use Test::More;
@@ -21,13 +21,16 @@ use Log::Fine::Levels::Syslog;
                 plan skip_all =>
 "Time::HiRes is not installed.  High precision logging not possible";
         } else {
-                plan tests => 13;
+                plan tests => 19;
         }
 
         # create a basic formatter
         my $basic = Log::Fine::Formatter::Basic->new(hires => 1);
 
-        ok(ref $basic eq "Log::Fine::Formatter::Basic");
+        isa_ok($basic, "Log::Fine::Formatter::Basic");
+        can_ok($basic, "name");
+        can_ok($basic, "timeStamp");
+
         ok($basic->name() =~ /\w\d+$/);
         ok($basic->timeStamp() eq
             Log::Fine::Formatter->LOG_TIMESTAMP_FORMAT_PRECISE);
@@ -50,7 +53,10 @@ use Log::Fine::Levels::Syslog;
         # now create a detailed formatter
         my $detailed = Log::Fine::Formatter::Detailed->new(hires => 1);
 
-        ok(ref $detailed eq "Log::Fine::Formatter::Detailed");
+        isa_ok($detailed, "Log::Fine::Formatter::Detailed");
+        can_ok($detailed, "name");
+        can_ok($detailed, "timeStamp");
+
         ok($detailed->name() =~ /\w\d+$/);
         ok($detailed->timeStamp() eq
             Log::Fine::Formatter->LOG_TIMESTAMP_FORMAT_PRECISE);
@@ -71,7 +77,10 @@ use Log::Fine::Levels::Syslog;
                                  timestamp_format => "%d %b %H:%M:%S.%%Millis%%"
             );
 
-        ok($precise->isa("Log::Fine::Formatter::Basic"));
+        isa_ok($precise, "Log::Fine::Formatter::Basic");
+        can_ok($precise, "name");
+        can_ok($precise, "format");
+
         ok($precise->name() =~ /\w\d+$/);
 
         my $log4 = $precise->format(WARN, $msg, 1);

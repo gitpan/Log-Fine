@@ -171,7 +171,7 @@ sub testFormat
 
 Getter/Setter for a L<strftime(3)-compatible|strftime> format string.
 If passed with an argument, sets the objects strftime compatible
-string.  Otherwise, returns the object's format string.
+string.  Otherwise, returns the objects format string.
 
 =head3 Parameters
 
@@ -319,7 +319,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: fb5ecf25692b13a012b1f8e5947c3ad40e30ca98 $
+  $Id: 215b8b16e3214a0a1f9347605a45756af7eb12fe $
 
 =head1 AUTHOR
 

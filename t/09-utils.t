@@ -1,10 +1,10 @@
 #!perl -T
 
 #
-# $Id: e2ff198c7f5670267557151438a4fdf8d21ae0da $
+# $Id: b3ed8f7915fbaa8aa65421125a748fde51ca2d10 $
 #
 
-use Test::Simple tests => 15;
+use Test::More tests => 16;
 
 use File::Spec::Functions;
 use FileHandle;
@@ -24,8 +24,8 @@ use Log::Fine::Utils;
             Log::Fine::Handle::File->new(file      => $file,
                                          autoflush => 1,);
 
-        # do some validation
-        ok($handle->isa("Log::Fine::Handle"));
+        isa_ok($handle, "Log::Fine::Handle");
+        can_ok($handle, "name");
 
         # remove the file if it exists so as not to confuse ourselves
         unlink $file if -e $file;
@@ -54,7 +54,7 @@ use Log::Fine::Utils;
         my $fh = FileHandle->new(catdir($handle->{dir}, $file));
 
         # see if a file handle was properly constructed
-        ok($fh->isa("IO::File"));
+        isa_ok($fh, "IO::File");
 
         # read in the file
         while (<$fh>) {

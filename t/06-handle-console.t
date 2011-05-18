@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 4506e919842e18351284e60641ac4fb865532858 $
+# $Id: 2a6e098397d10f75bbd2a9c94b90cf2482ddaad4 $
 #
 
 use Test::More;
@@ -26,19 +26,28 @@ my $handle = Log::Fine::Handle::Console->new();
                 plan skip_all =>
 "Test::Output 0.10 or above required for testing Console output";
         } else {
-                plan tests => 11;
+                plan tests => 17;
         }
+
+        isa_ok($handle, "Log::Fine::Handle::Console");
+        can_ok($handle, "name");
 
         ok($handle->name() =~ /\w\d+$/);
 
         # get a logger
         my $log = Log::Fine->logger("handleconsole0");
 
-        ok(ref $log eq "Log::Fine::Logger");
+        isa_ok($log, "Log::Fine");
+        can_ok($log, "name");
+
         ok($log->name() =~ /\w\d+$/);
 
         # do some validation
-        ok($handle->isa("Log::Fine::Handle"));
+        isa_ok($handle,              "Log::Fine::Handle");
+        isa_ok($handle->{formatter}, "Log::Fine::Formatter::Basic");
+        can_ok($handle, "name");
+        can_ok($handle, "msgWrite");
+
         ok($handle->name() =~ /\w\d+$/);
 
         # these should be set to their default values
