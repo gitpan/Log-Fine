@@ -232,14 +232,14 @@ sub _groupName
                 return $self->{_groupName};
         } elsif ($self->{use_effective_id}) {
                 $self->{_groupName} =
-                    ($^O eq "MSWin32")
-                    ? $ENV{EGID}   || 0
-                    : getgrgid($)) || "nogroup";
+                      ($^O eq "MSWin32")
+                    ? (split(" ", $ENV{EGID}))[0] || 0
+                    : getgrgid((split(" ", $)))[0]) || "nogroup";
         } else {
                 $self->{_groupName} =
-                    ($^O eq "MSWin32")
-                    ? $ENV{GID} || 0
-                    : getgrgid($() || "nogroup";
+                      ($^O eq "MSWin32")
+                    ? (split(" ", $ENV{GID}))[0] || 0
+                    : getgrgid((split(" ", $())[0]) || "nogroup";
         }
 
         return $self->{_groupName};
@@ -417,7 +417,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 629b9aea8554c845762c6ae1f7d6861c7a3117bc $
+  $Id: f2116f595288b74308040fedaa8a3a3a7eeaac5b $
 
 =head1 AUTHOR
 

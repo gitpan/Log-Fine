@@ -97,7 +97,7 @@ use constant VALTOLVL_MAP => {
 
 Log masks can be exported for use in setting up individual handles
 (see L<Log::Fine::Handle>).  The following masks are exported into the
-caller's namespace:
+caller namespace:
 
 =over 4
 
@@ -233,7 +233,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: f14739ff813ec7efd28abccc747f9a0e98290a5a $
+  $Id: 952262cd732968a603ed35a8dceabc1f9b94d9ca $
 
 =head1 AUTHOR
 

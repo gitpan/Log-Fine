@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 11db4056481c1c0910306c2fe1884b87c8a76d40 $
+# $Id: 3ae24ee18200b8c973498bfcd72892e67f92d85e $
 #
 
 use Test::More tests => 66;
@@ -167,7 +167,7 @@ use Sys::Hostname;
                     if ($^O eq "MSWin32");
 
                 ok($log_user->format(INFO, $msg, 0) eq getpwuid($<));
-                ok($log_group->format(INFO, $msg, 0) eq getgrgid($());
+                ok($log_group->format(INFO, $msg, 0) eq getgrgid((split(" ", $())[0]));
 
         }
 

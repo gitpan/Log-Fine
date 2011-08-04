@@ -50,7 +50,7 @@ our $AUTOLOAD;
 =head2 Log Levels
 
 Log::Fine::Levels::Syslog bases its log levels on those found in
-L<Sys::Syslog>.  The following are exported into the caller's
+L<Sys::Syslog>.  The following are exported into the caller
 namespace:
 
 =over 4
@@ -103,7 +103,7 @@ use constant VALTOLVL_MAP => {
 
 Log masks can be exported for use in setting up individual handles
 (see L<Log::Fine::Handle>).  The following masks are exported into the
-caller's namespace:
+caller namespace:
 
 =over 4
 
@@ -242,7 +242,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: a6095dff62ce5f0a8d862c82528b862b743af8e7 $
+  $Id: 4acc2f64bd615c757e1e01931d6d6c5025acc8f7 $
 
 =head1 AUTHOR
 
