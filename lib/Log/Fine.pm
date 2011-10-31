@@ -57,6 +57,11 @@ ways. Currently, the following handles are provided:
 
 Provides logging to C<STDERR> or C<STDOUT>
 
+=item  * L<Log::Fine::Handle::Email|Log::Fine::Handle::Email>
+
+Provides logging via email.  Useful for delivery to one or more pager
+addresses.
+
 =item  * L<Log::Fine::Handle::File|Log::Fine::Handle::File>
 
 Provides logging to a file
@@ -88,7 +93,7 @@ use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.56';
+our $VERSION = '0.57';
 
 =head2 Formatters
 
@@ -455,7 +460,7 @@ L<via email|/AUTHOR>.
 
 =head1 REVISION INFORMATION
 
-  $Id: 74a9a78fe2c62d8b703bc2055d7fad32a9180fc4 $
+  $Id: 208adb0f1944affef076e2df2b5c0ee99cbd6eec $
 
 =head1 AUTHOR
 

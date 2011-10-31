@@ -10,13 +10,15 @@ Provides a functional wrapper around Log::Fine.
     use Log::Fine::Handle;
     use Log::Fine::Handle::File;
     use Log::Fine::Handle::Syslog;
+    use Log::Fine::Levels::Syslog;
     use Log::Fine::Utils;
+    use Sys::Syslog;
 
     # set up some handles as you normally would.  First, a handler for
     # file logging:
     my $handle1 = Log::Fine::Handle::File
         ->new( name      => "file0",
-               mask      => Log::Fine::Handler->LOGMASK_ALL,
+               mask      => Log::Fine::Levels::Syslog->bitmaskAll(),
                formatter => Log::Fine::Formatter::Basic->new() );
 
     # and now a handle for syslog
@@ -125,7 +127,7 @@ Currently active L<Log::Fine::Logger> object
 
 =cut
 
-sub CurrentLogger { return _logger() }
+sub CurrentLogger { return _logger(); }
 
 =head2 ListLoggers
 
@@ -334,7 +336,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 2f6e8929bda748a21187b5557674f88db49e0f2d $
+  $Id: a1e5376d2295531277e7148a22620a4af4258fcb $
 
 =head1 AUTHOR
 
