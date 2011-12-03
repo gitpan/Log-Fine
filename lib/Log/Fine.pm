@@ -93,7 +93,7 @@ use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.57';
+our $VERSION = '0.58';
 
 =head2 Formatters
 
@@ -304,7 +304,7 @@ sub name { return $_[0]->{name} || undef }
 =head2 _fatal
 
 Private method that is called when a fatal (nonrecoverable) condition
-is encountered.  Will call L<croak|Carp> unless the {no_croak}
+is encountered.  Will call L<confess|Carp> unless the {no_croak}
 attribute is set.  For internal Log::Fine use I<only!>
 
 This method can be overridden per taste.
@@ -341,7 +341,7 @@ sub _fatal
             $call[2] || 0,
             $msg || "No reason given";
 
-        croak $msg
+        confess $msg
             if ((    defined $self
                  and $self->isa("Log::Fine")
                  and not $self->{no_croak})
@@ -460,7 +460,7 @@ L<via email|/AUTHOR>.
 
 =head1 REVISION INFORMATION
 
-  $Id: 208adb0f1944affef076e2df2b5c0ee99cbd6eec $
+  $Id: ea42303c5b42481877e22bb0784ed23d7e7bd394 $
 
 =head1 AUTHOR
 

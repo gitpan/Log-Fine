@@ -43,7 +43,7 @@ Provides a functional wrapper around Log::Fine.
     my $current_logger = CurrentLogger();
 
     # Get name of current logger
-    my $loggername = $current_logger->name();
+    my $loggername = $current_logger()->name();
 
     # Switch back to GENERIC logger
     OpenLog( name => "GENERIC" );
@@ -256,12 +256,12 @@ sub OpenLog
         if (     defined _logfine()
              and defined _logger()
              and _logfine()->isa("Log::Fine")
-             and _logger->isa("Log::Fine::Logger")
-             and (_logger->name() =~ /\w/)
+             and _logger()->isa("Log::Fine::Logger")
+             and (_logger()->name() =~ /\w/)
              and grep(/$data{name}/, ListLoggers())) {
 
                 # set the current logger to the given name
-                _logger(_logfine->logger($data{name}));
+                _logger(_logfine()->logger($data{name}));
 
         } elsif (   not defined $data{handles}
                  or ref $data{handles} ne "ARRAY"
@@ -274,8 +274,8 @@ sub OpenLog
         } else {
 
                 # Instantiate a new Log::Fine::Logger object and store
-                _logger(_logfine->logger($data{name}));
-                _logger->registerHandle($_) foreach @{ $data{handles} };
+                _logger(_logfine()->logger($data{name}));
+                _logger()->registerHandle($_) foreach @{ $data{handles} };
 
         }
 
@@ -336,7 +336,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: a1e5376d2295531277e7148a22620a4af4258fcb $
+  $Id: 48cd5a4fe64adcc9eed28e8196e9f7aeba3614d4 $
 
 =head1 AUTHOR
 

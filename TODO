@@ -287,3 +287,73 @@
 
   Need to figure out if I'm going to add this to 0.57 or save this
   functionality for 0.58.
+* DONE [#C] Add custom templates?                                 :templates:
+  CLOSED: [2011-11-22 Tue 10:51]
+  - CLOSING NOTE [2011-11-22 Tue 10:52] \\
+    Support added as of [[https://github.com/cfuhrman/log-fine/commit/fe15b6105aa9b4ca4f2ae230e43fdaa22a2d27e3][fe15b6105]].  Spiffy!
+
+  Extend L::F::F::Template to allow for custom template keys.
+  Ideally, this would work as follows:
+
+  #+BEGIN_SRC perl
+  my $counter = 0;
+
+  sub foobar { return ++$counter; } # foobar()
+
+  # define a template formatter with a custom keyword, FOOBAR
+  my $template = Log::Fine::Formatter::Template
+      ->new(name      => 'template2',
+            template  => "[%%TIME%%] %%LEVEL%% (count:%%FOOBAR%%) %%MSG%%\n",
+            custom_templates => {
+                FOOBAR => \&foobar,                       
+            });
+  #+END_SRC
+
+** Details:
+
+   1) Should this functionality be added to Template.pm or should
+      Template.pm be overridden (L::F::F::Template::Custom)
+
+      I think just adding it to L::F::F::Template would not incur too
+      great a penalty
+
+   2) Would there be demand for this functionality?
+
+      Perhaps for custom paging, say, for example, when you're sending
+      a page with a dynamic code in the subject line
+* DONE [#B] Check for key collision in custom templates           :templates:
+  CLOSED: [2011-12-02 Fri 12:51]
+  - CLOSING NOTE [2011-12-02 Fri 12:51] \\
+    Code in place and unit tests are working properly.  Closing task
+
+  Catch the situation where a user defines two custom templates with
+  the same key.  Do not forget to add appropriate unit tests for this.
+
+** Task log
+
+   [2011-12-01 Thu 21:40] Added key collision check and associated
+   unit test, although unit test currently generates spewage which
+   will need to be filtered.
+
+* DONE [#B] Make sure custom placeholders are stored uppercase    :templates:
+  CLOSED: [2011-12-01 Thu 21:42]
+  - CLOSING NOTE [2011-12-01 Thu 21:42] \\
+    Decided that placeholders are to be stored lowercase instead of
+    uppercase.  At any rate, this functionality has been implemented.
+
+  Make sure custom placeholder keys are stored uppercase internally.
+  This will make checking for key collisions much easier.
+
+** Task log
+
+   [2011-12-01 Thu 21:41] Decided that placeholders are to be stored
+   lowercase instead.
+
+* DONE [#B] Rename Template->_templateValidate()                  :templates:
+  CLOSED: [2011-12-02 Fri 12:51]
+  - CLOSING NOTE [2011-12-02 Fri 12:52] \\
+    Completed.  ~_templateValidate()~ has been replaced with
+    ~_placeholderValidate()~
+
+  Rename ~Template->_templateValidate()~ to some other method name
+  that has the word 'placeholder' in it.

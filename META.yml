@@ -32,4 +32,4 @@ resources:
   bugtracker: http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine
   license: https://github.com/cfuhrman/log-fine/raw/master/LICENSE
   repository: https://github.com/cfuhrman/log-fine
-version: 0.57
+version: 0.58

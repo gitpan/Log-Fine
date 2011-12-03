@@ -64,7 +64,7 @@ sub bitmaskListEnabled
         my $map      = $self->levelMap();
         my @bitmasks = ();
 
-        # reminder: log() here is the perl logarthmic function (see
+        # reminder: log() here is the perl logarithmic function (see
         # perlfunc(3)) and is not to be confused with the name of this
         # module ;)
         foreach my $maskname ($map->logMasks()) {
@@ -270,7 +270,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: c68be33f053e17a8eb0413a0d20ae00d0ff75341 $
+  $Id: eb682cd6d5b120525dc6ddae6dc44df5e0fbba48 $
 
 =head1 AUTHOR
 
@@ -282,7 +282,7 @@ L<perl>, L<Log::Fine>, L<Log::Fine::Formatter>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2010 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2010-2011 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...
