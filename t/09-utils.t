@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: b3ed8f7915fbaa8aa65421125a748fde51ca2d10 $
+# $Id: bd06e4ce9c05641ea11135aaeda755a2ae8738e2 $
 #
 
 use Test::More tests => 16;
@@ -90,6 +90,10 @@ use Log::Fine::Utils;
 
         ok(-f $file);
 
+        # Clean up
+        $fh->flush();
+        $fh->close();
+        $handle->fileHandle()->close();
         unlink $file;
 
 }

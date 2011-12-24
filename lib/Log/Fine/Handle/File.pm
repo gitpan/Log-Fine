@@ -187,7 +187,7 @@ sub _init
 
         # default directory is the current directory unless file is an
         # absolute path
-        if ($self->{file} =~ /^\//) {
+        if ($self->{file} =~ /^\/|^[A-Za-z]:\\/) {
                 $self->{dir} = "";
         } elsif (not defined $self->{dir} or not -d $self->{dir}) {
                 $self->{dir} = "./";
@@ -264,7 +264,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 5fd00c02c855b20548339f2085418e8375fbd5b0 $
+  $Id: 5fc56d0db5f7845533401a46a3ff114b54c5361e $
 
 =head1 AUTHOR
 

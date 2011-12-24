@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: 9e9d75544e141410f903c4296aeb08fa22dab3f5 $
+# $Id: 8f0a837b5e4fcc52d7b3c379ed4b7a26f8decb0b $
 #
 
 use Test::More tests => 70;
@@ -124,6 +124,10 @@ my $counter = 0;
 
         ok($log_custom->name() =~ /\w\d+$/);
 
+        # save original STDERR on newer versions of perl
+        open my $saved_stderr, ">&STDERR"
+            if $^V ge v5.8.0;
+
         eval {
 
                # note: this may or may not work under Windows
@@ -144,6 +148,10 @@ my $counter = 0;
         };
 
         ok($@ =~ /^Duplicate placeholder/);
+
+        # restore original STDERR
+        open STDERR, ">&", $saved_stderr or die "open: $!"
+            if $^V ge v5.8.0;
 
         # time
         my $log_time =
@@ -203,7 +211,7 @@ my $counter = 0;
                 skip
 "Cannot accurately test user and group placeholders under MSWin32",
                     2
-                    if ($^O eq "MSWin32");
+                    if ($^O =~ /MSWin32/);
 
                 ok($log_user->format(INFO, $msg, 0) eq getpwuid($<));
                 ok($log_group->format(INFO, $msg, 0) eq
@@ -273,7 +281,8 @@ my $counter = 0;
         ok($logfunc =~ /^\[.*?\] NOTI main\:\:logFunc\:\d+ $msg/);
         ok($logpack =~ /^\[.*?\] ERR This\:\:Test\:\:doFunc\:\d+ $msg/);
 
-        # We're done.
+        # We're done so clean up
+        $handle->fileHandle()->close();
         unlink $logfile;
 
 }

@@ -152,7 +152,7 @@ METHODS
 
     Parameters
     message
-        Message passed to croak.
+        Message passed to confess.
 
 ACKNOWLEDGMENTS
     I'd like the thank the following people for either inspiration or past
@@ -208,7 +208,7 @@ CONTRIBUTING
     email.
 
 REVISION INFORMATION
-      $Id: 2df38d943570dffcf1edfd07d91978fb88a2784d $
+      $Id: 24661b2e9567fe684dbb53fd63b17b22d38ce7a4 $
 
 AUTHOR
     Christopher M. Fuhrman, `<cfuhrman at panix.com>'

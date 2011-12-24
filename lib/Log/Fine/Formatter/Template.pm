@@ -265,15 +265,25 @@ sub _groupName
         if (defined $self->{_groupName} and $self->{_groupName} =~ /\w/) {
                 return $self->{_groupName};
         } elsif ($self->{use_effective_id}) {
-                $self->{_groupName} =
-                      ($^O eq "MSWin32")
-                    ? (split(" ", $ENV{EGID}))[0] || 0
-                    : getgrgid((split(" ", $)))[0]) || "nogroup";
+                if ($^O =~ /MSWin32/) {
+                        $self->{_groupname} =
+                              (defined $ENV{EGID})
+                            ? (split(" ", $ENV{EGID}))[0]
+                            : 0;
+                } else {
+                        $self->{_groupName} = getgrgid((split(" ", $)))[0])
+                            || "nogroup";
+                }
         } else {
-                $self->{_groupName} =
-                      ($^O eq "MSWin32")
-                    ? (split(" ", $ENV{GID}))[0] || 0
-                    : getgrgid((split(" ", $())[0]) || "nogroup";
+                if ($^O =~ /MSWin32/) {
+                        $self->{_groupName} =
+                              (defined $ENV{GID})
+                            ? (split(" ", $ENV{GID}))[0]
+                            : 0;
+                } else {
+                        $self->{_groupname} = getgrgid((split(" ", $())[0])
+                            || "nogroup";
+                }
         }
 
         return $self->{_groupName};
@@ -502,7 +512,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 532314932477b2bca0c058766ac1e85c83abdd15 $
+  $Id: 669936c397ae6ef9a3596f8862d0583302e9c373 $
 
 =head1 AUTHOR
 

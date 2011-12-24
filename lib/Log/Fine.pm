@@ -93,7 +93,7 @@ use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.58';
+our $VERSION = '0.59';
 
 =head2 Formatters
 
@@ -315,7 +315,7 @@ This method can be overridden per taste.
 
 =item message
 
-Message passed to L<croak|Carp>.
+Message passed to L<confess|Carp>.
 
 =back
 
@@ -460,7 +460,7 @@ L<via email|/AUTHOR>.
 
 =head1 REVISION INFORMATION
 
-  $Id: ea42303c5b42481877e22bb0784ed23d7e7bd394 $
+  $Id: 24661b2e9567fe684dbb53fd63b17b22d38ce7a4 $
 
 =head1 AUTHOR
 
