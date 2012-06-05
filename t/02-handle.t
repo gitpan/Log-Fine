@@ -1,10 +1,10 @@
 #!perl -T
 
 #
-# $Id: b095e54785421efbeaf5729778edd29040ea7c6e $
+# $Id: db6e247203619d7b560f4bc4c201cac3226e9cd6 $
 #
 
-use Test::More tests => 24;
+use Test::More tests => 25;
 
 #use Data::Dumper;
 use Log::Fine;
@@ -82,7 +82,7 @@ use Log::Fine::Levels::Syslog qw( :macros :masks );
 
                 skip
 "Test::Output 0.10 or above required for testing Console output",
-                    1
+                    2
                     if $@;
 
                 my $msg =
@@ -93,6 +93,9 @@ use Log::Fine::Levels::Syslog qw( :macros :masks );
                             qr/direct call to abstract method/,
                             'Test Direct Abstract Call'
                 );
+
+                ok(defined $badhandle->{_err_str}
+                    and $badhandle->{_err_str} =~ /\w/);
 
         }
 

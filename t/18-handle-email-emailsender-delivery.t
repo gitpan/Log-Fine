@@ -1,7 +1,7 @@
 #!perl
 
 #
-# $Id: 78408aaa6bf552d760c57f296ff7f80e4a7f0184 $
+# $Id: e14ed31c7c678023445bf0eb2debb35eac79f7d3 $
 #
 
 #use Data::Dumper;
@@ -38,7 +38,7 @@ use Test::More;
 
                 if ($@) {
                         plan skip_all =>
-"Mail::RFC822::Address is not installed.  Unable to test Log::Fine::Handle::Email";
+                            "Mail::RFC822::Address is not installed";
                 } else {
                         plan tests => 6;
                 }
@@ -65,8 +65,8 @@ use Test::More;
 
         # Create a formatted msg template
         my $msgtmpl = <<EOF;
-This is a test of Log::Fine::Handle::Email.  The following message was
-delivered at %%TIME%%:
+This is a test of Log::Fine::Handle::Email::EmailSender using Perl $].
+The following message was delivered at %%TIME%%:
 
 --------------------------------------------------------------------
 %%MSG%%
@@ -102,16 +102,18 @@ EOF
         $log->registerHandle($handle);
 
         # Grab number of messages
-        my $msg_t1 = qx! mail -H | wc -l !;
+        my $msg_t1 =
+            ($^O eq "solaris") ? qx! mailx -H | wc -l ! : qx! mail -H | wc -l !;
 
-        $log->log(DEBG, "Debugging 16-handle-email-smtp.t");
+        $log->log(DEBG, "Debugging $0");
         $log->log(CRIT, "Beware the weeping angels");
 
         # Give sendmail a chance to deliver
         print STDERR "---- Sleeping for 5 seconds";
         sleep 5;
 
-        my $msg_t2 = qx! mail -H | wc -l !;
+        my $msg_t2 =
+            ($^O eq "solaris") ? qx! mailx -H | wc -l ! : qx! mail -H | wc -l !;
 
         ok($msg_t2 > $msg_t1);
 

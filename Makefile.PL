@@ -1,7 +1,7 @@
 # -*- mode: cperl -*-
 
 #
-# $Id: e6da3c8f1165ebfa5bf0c21715dc6042df149735 $
+# $Id: 3f371490c4a0287d69bcc08a1bd80164868f6b3d $
 #
 
 use strict;
@@ -38,6 +38,7 @@ WriteMakefile(
                                   'Email::Sender'         => 0.110000,
                                   'Mail::RFC822::Address' => 0.3,
                                   'Throwable'             => 0.102080,
+                                  'Try::Tiny'             => 0.11,
                 }
         },
         dist => {

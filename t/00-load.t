@@ -1,6 +1,6 @@
 #!perl -T
 
-use Test::More tests => 18;
+use Test::More tests => 17;
 
 BEGIN {
         use_ok('Log::Fine');
@@ -20,22 +20,6 @@ BEGIN {
         use_ok('Log::Fine::Levels::Java');
         use_ok('Log::Fine::Logger');
         use_ok('Log::Fine::Utils');
-
-    SKIP: {
-
-                eval "use Email::Sender";
-                skip "Email::Sender required for testing Email delivery", 1
-                    if $@;
-
-                eval "use Mail::RFC822::Address";
-                skip
-                    "Mail::RFC822::Address required for testing Email delivery",
-                    1
-                    if $@;
-
-                use_ok('Log::Fine::Handle::Email');
-
-        }
 
 }
 

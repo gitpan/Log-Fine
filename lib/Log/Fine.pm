@@ -93,7 +93,7 @@ use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.59';
+our $VERSION = '0.60';
 
 =head2 Formatters
 
@@ -303,9 +303,11 @@ sub name { return $_[0]->{name} || undef }
 
 =head2 _fatal
 
-Private method that is called when a fatal (nonrecoverable) condition
-is encountered.  Will call L<confess|Carp> unless the {no_croak}
-attribute is set.  For internal Log::Fine use I<only!>
+Private internal method that is called when a fatal (nonrecoverable)
+condition is encountered.  Unless the C<{no_croak}> attribute is
+defined, this method will call L<confess|Carp>.  Also, should the user
+elect to set C<{no_croak}>, then the objects C<{_err_str}> attribute
+will contain a string representing the error message.
 
 This method can be overridden per taste.
 
@@ -340,6 +342,9 @@ sub _fatal
             strftime("%c", localtime(time)), $call[0] || "{undef}",
             $call[2] || 0,
             $msg || "No reason given";
+
+        $self->{_err_str} = $msg
+            if (defined $self and $self->isa("Log::Fine"));
 
         confess $msg
             if ((    defined $self
@@ -460,7 +465,7 @@ L<via email|/AUTHOR>.
 
 =head1 REVISION INFORMATION
 
-  $Id: 24661b2e9567fe684dbb53fd63b17b22d38ce7a4 $
+  $Id: 932c8654dcfcb546585ef0d42afa3ac7b5f77d22 $
 
 =head1 AUTHOR
 
@@ -473,7 +478,7 @@ L<Log::Fine::Logger>, L<Log::Fine::Utils>, L<Sys::Syslog>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008-2011 Christopher M. Fuhrman, 
+Copyright (c) 2008-2012 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

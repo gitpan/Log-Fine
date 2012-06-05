@@ -1,10 +1,9 @@
-#!perl -T
+#!perl
 
 #
-# $Id: 005be41eb76b87b1fd2df0ae6022d4ee7a6771fe $
+# $Id: ff0131424d137e5d3e4a8e0bc86d0d1eafdb00a8 $
 #
 
-#use Data::Dumper;
 use Log::Fine;
 use Log::Fine::Formatter::Template;
 use Log::Fine::Levels::Syslog qw( :macros :masks );
@@ -12,20 +11,25 @@ use Test::More;
 
 {
 
-        eval "require Email::Sender";
+        $ENV{ENABLE_AUTHOR_TESTS} = 0
+            unless defined $ENV{ENABLE_AUTHOR_TESTS};
+
+        # Check environmental variables
+        plan skip_all => "these tests are for testing by the author"
+            unless $ENV{ENABLE_AUTHOR_TESTS};
+        plan skip_all => "cannot test delivery under MsWin32 or cygwin"
+            if (($^O eq "MSWin32") || ($^O eq "cygwin"));
+
+        # See if we have MIME::Lite installed
+        eval "require MIME::Lite";
 
         if ($@) {
-                plan skip_all =>
-                    "Email::Sender is not installed.  Skipping (for now)";
+                plan skip_all => "MIME::Lite is not installed";
         } else {
-                plan tests => 5;
+                plan tests => 6;
         }
 
-        use_ok("Log::Fine::Handle::Email");
-
-        # Load appropriate modules
-        require Email::Sender::Simple;
-        require Email::Sender::Transport::Test;
+        use_ok("Log::Fine::Handle::Email::MIMELite");
 
         my $user =
             sprintf('%s@localhost', getlogin() || getpwuid($<) || "nobody");
@@ -42,8 +46,8 @@ use Test::More;
 
         # Create a formatted msg template
         my $msgtmpl = <<EOF;
-This is a test of Log::Fine::Handle::Email.  The following message was
-delivered at %%TIME%%:
+This is a test of Log::Fine::Handle::Email::MIMELite using Perl $].
+The following message was delivered at %%TIME%%:
 
 --------------------------------------------------------------------
 %%MSG%%
@@ -71,9 +75,28 @@ EOF
                            body_formatter    => $bodyfmt,
                            header_from       => $user,
                            header_to         => $user,
+                           email_handle      => "MIMELite",
             );
 
-        # Note that the default should be an EmailSender class
-        isa_ok($handle, "Log::Fine::Handle::Email::EmailSender");
+        isa_ok($handle, "Log::Fine::Handle::Email::MIMELite");
+
+        # register the handle
+        $log->registerHandle($handle);
+
+        # Grab number of messages
+        my $msg_t1 =
+            ($^O eq "solaris") ? qx! mailx -H | wc -l ! : qx! mail -H | wc -l !;
+
+        $log->log(DEBG, "Debugging $0");
+        $log->log(CRIT, "Beware the weeping angels");
+
+        # Give sendmail a chance to deliver
+        print STDERR "---- Sleeping for 5 seconds";
+        sleep 5;
+
+        my $msg_t2 =
+            ($^O eq "solaris") ? qx! mailx -H | wc -l ! : qx! mail -H | wc -l !;
+
+        ok($msg_t2 > $msg_t1);
 
 }

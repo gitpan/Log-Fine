@@ -70,9 +70,7 @@ sub bitmaskListEnabled
         foreach my $maskname ($map->logMasks()) {
                 push @bitmasks, $maskname
                     if $self->isLoggable(
-                                    log($map->maskToValue($maskname)) / log(2) -
-                                        1
-                    );
+                                log($map->maskToValue($maskname)) / log(2) - 1);
         }
 
         return @bitmasks;
@@ -197,11 +195,16 @@ sub msgWrite
         my $self  = shift;
         my $class = ref $self;
 
-        $self->_fatal(
-"direct call to abstract method msgWrite()!\n  See Log::Fine::Handle documentation"
-        ) if $class eq 'Log::Fine::Handle';
+        my $msg =
+            ($class eq 'Log::Fine::Handle')
+            ? "direct call to abstract method msgWrite()!\n  See ${class} documentation"
+            : "call to abstract method ${class}::msgWrite()";
 
-        $self->_fatal("call to abstract method ${class}::msgWrite()");
+        $self->_fatal($msg);
+
+        #
+        # NOT REACHED
+        #
 
 }          # msgWrite()
 
@@ -270,7 +273,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: eb682cd6d5b120525dc6ddae6dc44df5e0fbba48 $
+  $Id: 9de32f36b06f627623e05f437937062559173187 $
 
 =head1 AUTHOR
 

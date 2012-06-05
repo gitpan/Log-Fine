@@ -336,7 +336,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 48cd5a4fe64adcc9eed28e8196e9f7aeba3614d4 $
+  $Id: a1e5376d2295531277e7148a22620a4af4258fcb $
 
 =head1 AUTHOR
 
