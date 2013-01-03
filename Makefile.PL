@@ -1,14 +1,12 @@
 # -*- mode: cperl -*-
 
 #
-# $Id: 3f371490c4a0287d69bcc08a1bd80164868f6b3d $
+# $Id: 3b143657b841258eaf73eccebaab3d02a452fbce $
 #
 
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
-
-use Sys::Syslog 0.13;
 
 # Write our Makefile
 WriteMakefile(
@@ -18,11 +16,8 @@ WriteMakefile(
         VERSION_FROM  => 'lib/Log/Fine.pm',
         ABSTRACT_FROM => 'lib/Log/Fine.pm',
         PL_FILES      => {},
-        PREREQ_PM     => {
-                       'Test::More'  => 0,
-                       'Sys::Syslog' => "0.13"
-        },
-        META_MERGE => {
+        PREREQ_PM     => { 'Test::More' => 0, },
+        META_MERGE    => {
                 'resources' => {
                        bugtracker =>
 "http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine",
@@ -38,7 +33,6 @@ WriteMakefile(
                                   'Email::Sender'         => 0.110000,
                                   'Mail::RFC822::Address' => 0.3,
                                   'Throwable'             => 0.102080,
-                                  'Try::Tiny'             => 0.11,
                 }
         },
         dist => {

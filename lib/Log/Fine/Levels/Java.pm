@@ -11,7 +11,7 @@ java.utils.logging
     use Log::Fine;
     use Log::Fine::Levels::Java;
 
-    # grab a logging object
+    # Grab a logging object
     my $log = Log::Fine->getLogger("foo1");
 
     # Note that FINER and SEVERE are provided by the
@@ -84,13 +84,13 @@ use constant LVLTOVAL_MAP => {
 
 # Default value-to-level hash
 use constant VALTOLVL_MAP => {
-                               0 => "SEVERE",
-                               1 => "WARNING",
-                               2 => "INFO",
-                               3 => "CONFIG",
-                               4 => "FINE",
-                               5 => "FINER",
-                               6 => "FINEST",
+                               LVLTOVAL_MAP->{SEVERE}  => "SEVERE",
+                               LVLTOVAL_MAP->{WARNING} => "WARNING",
+                               LVLTOVAL_MAP->{INFO}    => "INFO",
+                               LVLTOVAL_MAP->{CONFIG}  => "CONFIG",
+                               LVLTOVAL_MAP->{FINE}    => "FINE",
+                               LVLTOVAL_MAP->{FINER}   => "FINER",
+                               LVLTOVAL_MAP->{FINEST}  => "FINEST",
 };          # VALTOLVL_MAP{}
 
 =head2 Log Masks
@@ -175,7 +175,7 @@ sub AUTOLOAD
         # Get the method name
         my $name = $AUTOLOAD;
 
-        # strip out package prefix
+        # Strip out package prefix
         $name =~ s/.*://;
 
         # Return on DESTROY
@@ -189,7 +189,7 @@ sub AUTOLOAD
                        "Invalid function name : $name"
                )) unless (exists $ok_fields{$name});
 
-        # evaluate and return the appropriate level
+        # Evaluate and return the appropriate level
         eval "sub $name { return $ok_fields{$name} }";
         goto &$name;
 
@@ -233,7 +233,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 952262cd732968a603ed35a8dceabc1f9b94d9ca $
+  $Id: a7dadef4c3249015df19d4ada266f16c4b0305ed $
 
 =head1 AUTHOR
 
@@ -246,7 +246,7 @@ L<http://java.sun.com/j2se/1.5.0/docs/api/java/util/logging/Level.html>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2010 Christopher M. Fuhrman, 
+Copyright (c) 2010, 2013 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

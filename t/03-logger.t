@@ -1,10 +1,10 @@
 #!perl -T
 
 #
-# $Id: a277714b8f94487a2393e5489596a5c161f92b62 $
+# $Id: 7abedff253a227b8a44ec4ae99a666607297f881 $
 #
 
-use Test::More tests => 21;
+use Test::More tests => 22;
 
 use Log::Fine;
 use Log::Fine::Handle::String;
@@ -19,10 +19,10 @@ use Log::Fine::Logger;
         isa_ok($log, "Log::Fine");
         can_ok($log, "name");
 
-        # all objects should have names
+        # All objects should have names
         ok($log->name() =~ /\w\d+$/);
 
-        # first we create a logger object
+        # First we create a logger object
         my $logger = Log::Fine->logger("logger0");
 
         isa_ok($logger, "Log::Fine::Logger");
@@ -31,14 +31,14 @@ use Log::Fine::Logger;
 
         ok($logger->name() =~ /\w\d+$/);
 
-        # create a handle for the logger and validate
+        # Create a handle for the logger and validate
         my $handle = Log::Fine::Handle::String->new();
 
         isa_ok($handle, "Log::Fine::Handle");
         can_ok($handle, "name");
         ok($handle->name() =~ /\w\d+$/);
 
-        # now register the handle and validate
+        # Now register the handle and validate
         my $result = $logger->registerHandle($handle);
 
         isa_ok($result, "Log::Fine::Logger");
@@ -48,58 +48,48 @@ use Log::Fine::Logger;
         # Log something (won't do anything)
         my $loggerrc = $logger->log(DEBG, "This is a test message");
 
-        # just make sure the object returned is a Logger object
+        # Just make sure the object returned is a Logger object
         isa_ok($loggerrc, "Log::Fine::Logger");
 
-        # make sure skip is set to our default
+        # Make sure skip is set to our default
         my $num = $logger->skip();
         ok($num == Log::Fine::Logger->LOG_SKIP_DEFAULT);
 
-        # set the skip level to 5
+        # Set the skip level to 5
         $logger->skip(5);
 
-        # check to see if it's okay
+        # Check to see if it's okay
         $num = $logger->skip();
         ok($num == 5);
 
-        # okay, now increment and decrement
+        # Okay, now increment and decrement
         ok($logger->incrSkip() == 6);
         ok($logger->decrSkip() == 5);
 
-    SKIP: {
+        # Create an invalid logger for testing
+        my $badlog = $log->logger("badlogger");
 
-                eval "use Test::Output 0.10";
+        # Call logger without a name
+        eval { my $foo = Log::Fine::Logger->new(); };
 
-                skip
-"Test::Output 0.10 or above required for testing Console output",
-                    3
-                    if $@;
+        ok($@ =~ /Loggers need names/);
 
-                # Create a valid logger for testing
-                my $badlog = $log->logger("badlogger");
+        # Test for no handles defined
+        eval {
+                $badlog->log(INFO,
+                             "It was lightning headaches and sweet avalanche");
+        };
 
-                $badlog->{no_croak} = 1;
+        ok($@ =~ /No handles defined/);
 
-                stderr_like(
-                        sub {
-                                my $foo = Log::Fine::Logger->new(no_croak => 1);
-                        },
-                        qr/Loggers need names/,
-                        'logger(): Invoked without name'
-                );
-                stderr_like(
-                        sub {
-                                $badlog->log(INFO,
-"It was lightning headaches and sweet avalanche"
-                                );
-                        },
-                        qr/No handles defined/,
-                        'log(): Invoke without handle'
-                );
-                stderr_like(sub { $badlog->registerHandle() },
-                            qr/must be a valid/,
-                            'registerHandle(): Invoke without handle');
+        # Test bad call to registerHandle()
+        eval { $badlog->registerHandle(); };
 
-        }
+        ok($@ =~ /^first argument must either be a valid Log/);
+
+        # Test bad array to registerHandle()
+        eval { $badlog->registerHandle([ $handle, $logger ]); };
+
+        ok($@ =~ /^Array ref must contain valid Log/);
 
 }

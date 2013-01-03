@@ -1,7 +1,7 @@
 #!perl -T
 
 #
-# $Id: c3ff9533d1a40248e9795540e8cb98b4a072eb78 $
+# $Id: 03dd6b0db22ae60c6bef803377bdad2ad698e4a5 $
 #
 
 use Test::More tests => 70;
@@ -74,7 +74,7 @@ my $counter = 0;
 
         ok($log_filename->name() =~ /\w\d+$/);
 
-        # short hostname
+        # Short hostname
         my $log_shorthost =
             Log::Fine::Formatter::Template->new(template => "%%HOSTSHORT%%",
                                                 timestamp_format => "%Y%m%d");
@@ -124,18 +124,7 @@ my $counter = 0;
 
         ok($log_custom->name() =~ /\w\d+$/);
 
-        # save original STDERR on newer versions of perl
-        open my $saved_stderr, ">&STDERR"
-            if $^V ge v5.8.0;
-
         eval {
-
-               # note: this may or may not work under Windows
-               if ($^O eq "MSWin32") {
-                       open STDERR, "> NUL";
-               } else {
-                       open STDERR, "> /dev/null";
-               }
 
                my $log_badcustom =
                    Log::Fine::Formatter::Template->new(
@@ -148,10 +137,6 @@ my $counter = 0;
         };
 
         ok($@ =~ /^Duplicate placeholder/);
-
-        # restore original STDERR
-        open STDERR, ">&", $saved_stderr or die "open: $!"
-            if $^V ge v5.8.0;
 
         # time
         my $log_time =
@@ -166,7 +151,7 @@ my $counter = 0;
         # Note we test time first to avoid a possible race condition
         # that would occur at the end of every month.
 
-        # validate
+        # Validate
         ok($log_time->format(INFO, $msg, 0) eq
             strftime("%Y%m", localtime(time)));
         ok($log_level->format(INFO, $msg, 0) eq "INFO");

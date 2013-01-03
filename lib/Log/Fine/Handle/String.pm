@@ -77,15 +77,14 @@ sub msgWrite
         my $msg  = shift;
         my $skip = shift;          # NOT USED
 
-        # make sure we load the appropriate formatter
+        # Validate formatter
         eval "require " . ref $self->{formatter};
 
-        # if we have a formatter defined, then use that, otherwise, just
-        # print the raw message
+        # Should we have a formatter defined, then use that,
+        # otherwise, just print the raw message
         $msg = $self->{formatter}->format($lvl, $msg, $skip)
             if defined $self->{formatter};
 
-        # Victory!
         return $msg;
 
 }          # msgWrite()
@@ -93,7 +92,7 @@ sub msgWrite
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-log-fine-handle-string at rt.cpan.org>, or through the web interface at
+C<bug-log-fine at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
@@ -128,7 +127,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 8fb352f52b7a59533d3ff582d7f919b0db886550 $
+  $Id: f2d239cd5170b8e79f074ef49d968f9430ff1c66 $
 
 =head1 AUTHOR
 
@@ -140,7 +139,7 @@ L<perl>, L<Log::Fine>, L<Log::Fine::Handle>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2010 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2010, 2013 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

@@ -14,14 +14,14 @@ Provides a functional wrapper around Log::Fine.
     use Log::Fine::Utils;
     use Sys::Syslog;
 
-    # set up some handles as you normally would.  First, a handler for
+    # Set up some handles as you normally would.  First, a handler for
     # file logging:
     my $handle1 = Log::Fine::Handle::File
         ->new( name      => "file0",
                mask      => Log::Fine::Levels::Syslog->bitmaskAll(),
                formatter => Log::Fine::Formatter::Basic->new() );
 
-    # and now a handle for syslog
+    # And now a handle for syslog
     my $handle2 = Log::Fine::Handle::Syslog
         ->new( name      => "syslog0",
                mask      => LOGMASK_EMERG | LOGMASK_CRIT | LOGMASK_ERR,
@@ -29,7 +29,7 @@ Provides a functional wrapper around Log::Fine.
                logopts   => 'pid',
                facility  => LOG_LEVEL0 );
 
-    # open the logging subsystem with the default name "GENERIC"
+    # Open the logging subsystem with the default name "GENERIC"
     OpenLog( handles  => [ $handle1, [$handle2], ... ],
              levelmap => "Syslog" );
 
@@ -85,14 +85,17 @@ our @EXPORT = qw( CurrentLogger ListLoggers Log OpenLog );
 
 {
 
-        my $logfine;          # Log::Fine object
-        my $logger;           # Ptr to current logger
+        my $logfine = undef;          # Log::Fine object
+        my $logger  = undef;          # Ptr to current logger
 
         # Getter/Setter for Log::Fine object
         sub _logfine
         {
                 $logfine = $_[0]
-                    if (defined $_[0] and ref $_[0] eq "Log::Fine");
+                    if (    defined $_[0]
+                        and ref $_[0]
+                        and UNIVERSAL::can($_[0], 'isa')
+                        and $_[0]->isa('Log::Fine'));
 
                 return $logfine;
         }
@@ -101,7 +104,10 @@ our @EXPORT = qw( CurrentLogger ListLoggers Log OpenLog );
         sub _logger
         {
                 $logger = $_[0]
-                    if (defined $_[0] and ref $_[0] eq "Log::Fine::Logger");
+                    if (    defined $_[0]
+                        and ref $_[0]
+                        and UNIVERSAL::can($_[0], 'isa')
+                        and $_[0]->isa('Log::Fine::Logger'));
 
                 return $logger;
         }
@@ -180,12 +186,15 @@ sub Log
         my $msg = shift;
         my $log = _logger();
 
-        # validate logger has been set
+        # Validate logger has been set
         Log::Fine->_fatal(  "Logging system has not been set up "
                           . "(See Log::Fine::Utils::OpenLog())")
-            unless (defined $log and $log->isa("Log::Fine::Logger"));
+            unless (    defined $log
+                    and ref $log
+                    and UNIVERSAL::can($log, 'isa')
+                    and $log->isa("Log::Fine::Logger"));
 
-        # make sure we log the correct calling method
+        # Make sure we log the correct calling method
         $log->incrSkip();
         $log->log($lvl, $msg);
         $log->decrSkip();
@@ -208,7 +217,8 @@ A hash containing the following keys:
 
 =item * handles
 
-An array ref containing one or more L<Log::Fine::Handle> objects
+Either a single L<Log::Fine::Handle> object or an array ref containing
+one or more L<Log::Fine::Handle> objects
 
 =item * levelmap
 
@@ -217,9 +227,12 @@ B<[optional]> L<Log::Fine::Levels> subclass to use.  Will default to
 
 =item * name
 
-B<[optional]> Name of logger.  If name is defined, will switch
-internal logger to given name, otherwise, creates a new logger and
-switches to that
+B<[optional]> Name of logger.  If name references an already
+registered logger, then will switch to the named logger.  Should the
+given name not exist, then will create a new logging object with that
+name, provided handles are provided.  Should name not be passed, then
+'GENERIC' will be used.  Note that you I<must> provide one or more
+valid handles when creating a new object.
 
 =item * no_croak
 
@@ -243,39 +256,40 @@ sub OpenLog
         $data{name} = "GENERIC"
             unless (defined $data{name} and $data{name} =~ /\w/);
 
-        # If no Log::Fine object is defined, generate one
+        # Should no Log::Fine object is defined, generate one
         _logfine(
                  Log::Fine->new(name     => "Utils",
                                 levelmap => $data{levelmap}
                                     || Log::Fine::Levels->DEFAULT_LEVELMAP,
                                 no_croak => $data{no_croak} || 0
-                 )
-        ) unless (defined _logfine() and _logfine()->isa("Log::Fine"));
+                 ))
+            unless (    defined _logfine()
+                    and ref _logfine()
+                    and UNIVERSAL::can(_logfine(), 'isa')
+                    and _logfine()->isa('Log::Fine'));
 
-        # See if the given logger name is already defined
-        if (     defined _logfine()
-             and defined _logger()
-             and _logfine()->isa("Log::Fine")
-             and _logger()->isa("Log::Fine::Logger")
-             and (_logger()->name() =~ /\w/)
+        # See if we have the given logger name
+        if (     defined _logger
+             and ref _logger()
+             and UNIVERSAL::can(_logger(), 'isa')
+             and _logger()->isa('Log::Fine::Logger')
+             and defined _logger()->name()
+             and _logger()->name() =~ /\w/
              and grep(/$data{name}/, ListLoggers())) {
 
-                # set the current logger to the given name
+                # Set the current logger to the given name
                 _logger(_logfine()->logger($data{name}));
-
-        } elsif (   not defined $data{handles}
-                 or ref $data{handles} ne "ARRAY"
-                 or scalar @{ $data{handles} } == 0) {
-
-                # No Log::Fine::Handle objects are defined
-                Log::Fine->_fatal("At least one handle must be defined");
-                return undef;          # in case {no_croak} option given
 
         } else {
 
-                # Instantiate a new Log::Fine::Logger object and store
-                _logger(_logfine()->logger($data{name}));
-                _logger()->registerHandle($_) foreach @{ $data{handles} };
+                # Create logger, register handle(s), and store for
+                # future use.
+                my $logger = _logfine()->logger($data{name});
+
+                # Note that registerHandle() will take care of handle
+                # validation.
+                $logger->registerHandle($data{handles});
+                _logger($logger);
 
         }
 
@@ -286,7 +300,7 @@ sub OpenLog
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-log-fine-utils at rt.cpan.org>, or through the web interface at
+C<bug-log-fine at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
@@ -336,7 +350,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: a1e5376d2295531277e7148a22620a4af4258fcb $
+  $Id: 705e9305182e51a5b620099843bbbf27d3b4a04c $
 
 =head1 AUTHOR
 
@@ -348,7 +362,7 @@ L<perl>, L<Log::Fine>, L<Log::Fine::Handle>, L<Log::Fine::Logger>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2010, 2011 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2010-2011, 2013 Christopher M. Fuhrman, 
 All rights reserved
 
 This program is free software licensed under the...

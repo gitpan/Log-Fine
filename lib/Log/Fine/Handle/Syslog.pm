@@ -14,7 +14,7 @@ Provides logging to syslog()
     # Get a new logger
     my $log = Log::Fine->logger("foo");
 
-    # register a syslog handle
+    # Create a new syslog handle
     my $handle = Log::Fine::Handle::Syslog
         ->new( name  => 'syslog0',
                mask  => LOGMASK_EMERG | LOGMASK_ALERT | LOGMASK_CRIT | LOGMASK_ERR | LOGMASK_WARNING | LOGMASK_NOTICE | LOGMASK_INFO,
@@ -22,10 +22,10 @@ Provides logging to syslog()
                logopts => 'pid',
                facility => LOG_LEVEL0 );
 
-    # register the handle
+    # Register the handle
     $log->registerHandle($handle);
 
-    # log something
+    # Log something
     $log->(INFO, "Opened new log handle");
 
 =head1 DESCRIPTION
@@ -100,10 +100,9 @@ sub msgWrite
         my $skip = shift;               # NOT USED
         my $map  = LOG_MAPPING;
 
-        # write to syslog
+        # Write to syslog
         syslog($map->{$lvl}, $msg);
 
-        # Victory!
         return $self;
 
 }          # msgWrite()
@@ -118,7 +117,7 @@ sub _init
 
         my $self = shift;
 
-        # call the super object
+        # Perform any necessary upper class initializations
         $self->SUPER::_init();
 
         # Make sure we have one and only one syslog object defined
@@ -126,36 +125,30 @@ sub _init
                       sprintf("One and _only_ one %s object may be defined",
                               ref $self)) if _flag();
 
-        # set ident
+        # Set ident
         $self->{ident} = basename $0;
 
-        # set the default logopts (to be passed to Sys::Syslog::openlog()
+        # Set the default logopts (to be passed to Sys::Syslog::openlog()
         $self->{logopts} = "pid"
             unless (defined $self->{logopts} and $self->{logopts} =~ /\w+/);
 
-        # set the default facility
+        # Set the default facility
         $self->{facility} = LOG_LOCAL0
             unless (defined $self->{facility}
                     and $self->{facility} =~ /\w+/);
 
-        # open the syslog connection and set flag
+        # Open the syslog connection and set flag
         openlog($self->{ident}, $self->{logopts}, $self->{facility});
         _flag(1);
 
-        # Victory!
         return $self;
 
 }          # _init()
 
-##
-# called when this object is destroyed
-
-sub DESTROY { closelog(); }
-
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-log-fine-handle-syslog at rt.cpan.org>, or through the web interface at
+C<bug-log-fine at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
@@ -190,7 +183,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: c3d08d128e127c6efd71eb2184cc35de3f6eec5e $
+  $Id: dd58f96a90c9868ba002d1291c0e08bd3f807c38 $
 
 =head1 AUTHOR
 
@@ -202,7 +195,7 @@ L<perl>, L<syslog>, L<Sys::Syslog>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2010 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2010, 2013 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

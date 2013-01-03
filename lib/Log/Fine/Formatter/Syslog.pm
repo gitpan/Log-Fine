@@ -10,17 +10,17 @@ Formats messages in a style similar to syslog(1)
     use Log::Fine::Formatter::Syslog;
     use Log::Fine::Handle::Console;
 
-    # instantiate a handle
+    # Instantiate a handle
     my $handle = Log::Fine::Handle::Console->new();
 
-    # instantiate a formatter
+    # Instantiate a formatter
     my $formatter = Log::Fine::Formatter::Syslog
         ->new( name => 'syslog0');
 
-    # set the formatter
+    # Set the formatter
     $handle->formatter( formatter => $formatter );
 
-    # format a msg
+    # Format a msg
     my $str = $formatter->format(INFO, "Resistence is futile", 1);
 
 =head1 DESCRIPTION
@@ -95,11 +95,10 @@ sub format
         my $self = shift;
         my $lvl  = shift;
         my $msg  = shift;
-        my $skip = shift;
-        my $host = (split(/\./, hostname))[0];
+        my $skip =
+            (defined $_[0]) ? shift : Log::Fine::Logger->LOG_SKIP_DEFAULT;
 
-        # Set skip to default if need be
-        $skip = Log::Fine::Logger->LOG_SKIP_DEFAULT unless (defined $skip);
+        my $host = (split(/\./, hostname))[0];
 
         return
             sprintf("%s %s %s[%d]: %s\n",
@@ -110,7 +109,7 @@ sub format
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-log-fine-formatter-detailed at rt.cpan.org>, or through the web interface at
+C<bug-log-fine at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
@@ -145,7 +144,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 9761b376b45e2a1cc9b63e5ac2f63c8ea8c639fa $
+  $Id: 8d39f0fd77ccd049e9b93f5080febc05687d48da $
 
 =head1 AUTHOR
 
@@ -157,7 +156,7 @@ L<perl>, L<Log::Fine::Formatter>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2009, 2010 Christopher M. Fuhrman, 
+Copyright (c) 2008-2010, 2013 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

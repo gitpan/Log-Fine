@@ -11,27 +11,27 @@ Provides fine-grained logging and tracing.
     use Log::Fine::Levels::Syslog;                # exports log levels
     use Log::Fine::Levels::Syslog qw( :masks );   # exports masks and levels
 
-    # build a Log::Fine object
+    # Build a Log::Fine object
     my $fine = Log::Fine->new();
 
-    # specify a custom map
+    # Specify a custom map
     my $fine = Log::Fine->new(levelmap => "Syslog");
 
     # Get the name of the log object
     my $name = $fine->name();
 
-    # use logger() to get a new logger object.  If "foo" is not
+    # Use logger() to get a new logger object.  If "foo" is not
     # defined then a new logger with the name "foo" will be created.
     my $log = Log::Fine->logger("foo");
 
-    # get list of names of defined logger objects
+    # Get list of names of defined logger objects
     my @loggers = $log->listLoggers();
 
-    # register a handle, in this case a handle that logs to console.
+    # Register a handle, in this case a handle that logs to console.
     my $handle = Log::Fine::Handle::Console->new();
     $log->registerHandle( $handle );
 
-    # log a message
+    # Log a message
     $log->log(INFO, "Log object successfully initialized");
 
 =head1 DESCRIPTION
@@ -77,7 +77,7 @@ Provides logging to L<syslog>
 =back
 
 See the relevant perldoc information for more information.  Additional
-handlers can be defined to the user's taste.
+handlers can be defined to user taste.
 
 =cut
 
@@ -88,12 +88,12 @@ package Log::Fine;
 
 require 5.006;
 
-use Carp;
+use Carp qw( cluck confess );
 use Log::Fine::Levels;
 use Log::Fine::Logger;
 use POSIX qw( strftime );
 
-our $VERSION = '0.60';
+our $VERSION = '0.61';
 
 =head2 Formatters
 
@@ -125,12 +125,12 @@ To install Log::Fine:
 
 {
 
-        # private global variables
+        # Private global variables
         my $levelmap;
         my $loggers  = {};
         my $objcount = 0;
 
-        # getter/setter for levelMap.  Note that levelMap can only be
+        # Getter/setter for levelMap.  Note that levelMap can only be
         # set _once_.  Once levelmap is set, any other value passed,
         # whether a valid object or not, will be ignored!
         sub _levelMap
@@ -139,6 +139,8 @@ To install Log::Fine:
                 my $map = shift;
 
                 if (     defined $map
+                     and ref $map
+                     and UNIVERSAL::can($map, 'isa')
                      and $map->isa("Log::Fine::Levels")
                      and not $levelmap) {
                         $levelmap = $map;
@@ -185,13 +187,18 @@ for further details
 =item  * no_croak
 
 [optional] If set to true, then do not L<croak|Carp> when
-L</"_fatal()"> is called.
+L<_error> is called.
+
+=item  * err_callback
+
+[optional] If defined to a valid CODE ref, then this subroutine will
+be called instead of L<_fatal> when L<_error> is called.
 
 =back
 
 =head3 Returns
 
-The newly bless'd object
+The newly blessed object
 
 =cut
 
@@ -201,13 +208,12 @@ sub new
         my $class = shift;
         my %h     = @_;
 
-        # bless the hash into a class
+        # Bless the hash into a class
         my $self = bless \%h, $class;
 
-        # perform any necessary initializations
+        # Perform any necessary initializations
         $self->_init();
 
-        # return the bless'd object
         return $self;
 
 }          # new()
@@ -267,18 +273,19 @@ sub logger
         my $self = shift;
         my $name = shift;          # name of logger
 
-        # validate name
+        # Validate name
         $self->_fatal("First parameter must be a valid name!")
             unless (defined $name and $name =~ /\w/);
 
-        # If the requested logger is found, then return it, otherwise
-        # store and return a newly created logger object with the
-        # given name
+        # Should the requested logger be found, then return it,
+        # otherwise store and return a newly created logger object
+        # with the given name
         _logger()->{$name} = Log::Fine::Logger->new(name => $name)
-            unless (defined _logger()->{$name}
-                    and _logger()->{$name}->isa("Log::Fine::Logger"));
+            unless (    defined _logger()->{$name}
+                    and ref _logger()->{$name}
+                    and UNIVERSAL::can(_logger()->{$name}, 'isa')
+                    and _logger()->{$name}->isa('Log::Fine::Logger'));
 
-        # return the logger
         return _logger()->{$name};
 
 }          # logger()
@@ -301,15 +308,66 @@ sub name { return $_[0]->{name} || undef }
 
 # --------------------------------------------------------------------
 
-=head2 _fatal
+=head2 _error
 
-Private internal method that is called when a fatal (nonrecoverable)
-condition is encountered.  Unless the C<{no_croak}> attribute is
-defined, this method will call L<confess|Carp>.  Also, should the user
-elect to set C<{no_croak}>, then the objects C<{_err_str}> attribute
-will contain a string representing the error message.
+Private internal method that is called when an error condition is
+encountered.  Will call L<_fatal> unless C<{no_croak}> is defined.
 
 This method can be overridden per taste.
+
+=head3 Parameters
+
+=over
+
+=item message
+
+Message passed to L<confess|Carp>.
+
+=back
+
+=cut
+
+sub _error
+{
+        my $self;
+        my $msg;
+
+        # How were we called?
+        if (scalar @_ > 1) {
+                $self = shift;
+                $msg  = shift;
+        } else {
+                $msg = shift;
+        }
+
+        if (     defined $self
+             and ref $self
+             and UNIVERSAL::can($self, 'isa')
+             and $self->isa("Log::Fine")) {
+
+                if (defined $self->{err_callback}
+                     and ref $self->{err_callback} eq "CODE") {
+                        &{ $self->{err_callback} }($msg);
+                } elsif ($self->{no_croak}) {
+                        $self->{_err_msg} = $msg;
+                        cluck $msg;
+                } else {
+                        $self->_fatal($msg);
+                }
+
+        } else {
+                _fatal($msg);
+        }
+
+}
+
+=head2 _fatal
+
+Private internal method that is called when a fatal (non-recoverable)
+condition is encountered.  Calls L<confess|Carp> with given error
+message.
+
+While this method can be overridden, this is generally not advised.
 
 =head3 Parameters
 
@@ -328,9 +386,8 @@ sub _fatal
 
         my $self;
         my $msg;
-        my @call = caller;
 
-        # how were we called?
+        # How were we called?
         if (scalar @_ > 1) {
                 $self = shift;
                 $msg  = shift;
@@ -338,19 +395,11 @@ sub _fatal
                 $msg = shift;
         }
 
-        printf STDERR "\n[%s] {%s@%d} FATAL : %s\n",
-            strftime("%c", localtime(time)), $call[0] || "{undef}",
-            $call[2] || 0,
-            $msg || "No reason given";
+        confess $msg;
 
-        $self->{_err_str} = $msg
-            if (defined $self and $self->isa("Log::Fine"));
-
-        confess $msg
-            if ((    defined $self
-                 and $self->isa("Log::Fine")
-                 and not $self->{no_croak})
-                or (not defined $self));
+        #
+        # NOT REACHED
+        #
 
 }          # _fatal()
 
@@ -362,10 +411,9 @@ sub _init
 
         my $self = shift;
 
-        # increment object count
         _incrObjectCount();
 
-        # we set the objects name unless it is already set for us
+        # We set the objects name unless it is already set for us
         unless (defined $self->{name} and $self->{name} =~ /\w/) {
 
                 # grab the class name
@@ -375,12 +423,19 @@ sub _init
 
         }
 
+        # Validate {err_callback}
+        if (defined $self->{err_callback}) {
+                $self->_fatal("{err_callback} must be a valid code ref")
+                    unless ref $self->{err_callback} eq "CODE";
+        }
+
         # Set our levels if we need to
         _levelMap(Log::Fine::Levels->new($self->{levelmap}))
-            unless (defined _levelMap()
+            unless (    defined _levelMap()
+                    and ref _levelMap()
+                    and UNIVERSAL::can(_levelMap(), 'isa')
                     and _levelMap()->isa("Log::Fine::Levels"));
 
-        # Victory!
         return $self;
 
 }          # _init()
@@ -465,7 +520,7 @@ L<via email|/AUTHOR>.
 
 =head1 REVISION INFORMATION
 
-  $Id: 932c8654dcfcb546585ef0d42afa3ac7b5f77d22 $
+  $Id: db401d86c54473d42208e03711265f2b7dfd70fd $
 
 =head1 AUTHOR
 
@@ -478,7 +533,7 @@ L<Log::Fine::Logger>, L<Log::Fine::Utils>, L<Sys::Syslog>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008-2012 Christopher M. Fuhrman, 
+Copyright (c) 2008-2011, 2013 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

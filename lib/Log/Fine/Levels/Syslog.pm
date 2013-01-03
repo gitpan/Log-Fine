@@ -11,7 +11,7 @@ Syslog.
     use Log::Fine;
     use Log::Fine::Levels::Syslog;
 
-    # grab a logging object
+    # Grab a logging object
     my $log = Log::Fine->getLogger("foo0");
 
     # Note that INFO and EMER are provided by the
@@ -89,14 +89,14 @@ use constant LVLTOVAL_MAP => {
 
 # Default value-to-level hash
 use constant VALTOLVL_MAP => {
-                               0 => "EMER",
-                               1 => "ALRT",
-                               2 => "CRIT",
-                               3 => "ERR",
-                               4 => "WARN",
-                               5 => "NOTI",
-                               6 => "INFO",
-                               7 => "DEBG"
+                               LVLTOVAL_MAP->{EMER} => "EMER",
+                               LVLTOVAL_MAP->{ALRT} => "ALRT",
+                               LVLTOVAL_MAP->{CRIT} => "CRIT",
+                               LVLTOVAL_MAP->{ERR}  => "ERR",
+                               LVLTOVAL_MAP->{WARN} => "WARN",
+                               LVLTOVAL_MAP->{NOTI} => "NOTI",
+                               LVLTOVAL_MAP->{INFO} => "INFO",
+                               LVLTOVAL_MAP->{DEBG} => "DEBG"
 };          # VALTOLVL_MAP{}
 
 =head2 Log Masks
@@ -184,13 +184,13 @@ sub AUTOLOAD
         # Get the method name
         my $name = $AUTOLOAD;
 
-        # strip out package prefix
+        # Strip out package prefix
         $name =~ s/.*://;
 
         # Return on DESTROY
         return if $name eq 'DESTROY';
 
-        # make sure we have a valid function
+        # Make sure we have a valid function
         croak(
                sprintf("[%s] {%s} FATAL : %s\n",
                        strftime("%c", localtime(time)),
@@ -198,7 +198,7 @@ sub AUTOLOAD
                        "Invalid function name : $name"
                )) unless (exists $ok_fields{$name});
 
-        # evaluate and return the appropriate level
+        # Evaluate and return the appropriate level
         eval "sub $name { return $ok_fields{$name} }";
         goto &$name;
 
@@ -242,7 +242,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 4acc2f64bd615c757e1e01931d6d6c5025acc8f7 $
+  $Id: 98b23936ad2d66618e8bdbd3cd0af9ea9bbc6f66 $
 
 =head1 AUTHOR
 
@@ -254,7 +254,7 @@ L<perl>, L<syslog>, L<Log::Fine>, L<Log::Fine::Levels>, L<Sys::Syslog>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2009, 2010 Christopher M. Fuhrman, 
+Copyright (c) 2009, 2010, 2013 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

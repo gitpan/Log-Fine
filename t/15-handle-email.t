@@ -1,8 +1,10 @@
 #!perl -T
 
 #
-# $Id: 005be41eb76b87b1fd2df0ae6022d4ee7a6771fe $
+# $Id: 2c85b4446aa8a982a095d16d0dfc214161b3c632 $
 #
+
+BEGIN { $ENV{EMAIL_SENDER_TRANSPORT} = 'Test' }
 
 #use Data::Dumper;
 use Log::Fine;
@@ -12,16 +14,30 @@ use Test::More;
 
 {
 
+        plan skip_all => "Email handle only supported in perl 5.8.3 or above"
+            if $^V lt v5.8.3;
+
+        # See if we have Email::Sender installed
         eval "require Email::Sender";
 
         if ($@) {
                 plan skip_all =>
-                    "Email::Sender is not installed.  Skipping (for now)";
+"Email::Sender is not installed.  Unable to test Log::Fine::Handle::Email";
         } else {
-                plan tests => 5;
+
+                eval "require Mail::RFC822::Address";
+
+                if ($@) {
+                        plan skip_all =>
+"Mail::RFC822::Address is not installed.  Unable to test Log::Fine::Handle::Email";
+                } else {
+                        plan tests => 8;
+                }
         }
 
         use_ok("Log::Fine::Handle::Email");
+
+        my $email_sender_version = $Email::Sender::VERSION;
 
         # Load appropriate modules
         require Email::Sender::Simple;
@@ -62,7 +78,7 @@ EOF
         isa_ok($subjfmt, "Log::Fine::Formatter::Template");
         isa_ok($bodyfmt, "Log::Fine::Formatter::Template");
 
-        # register an email handle
+        # Register an email handle
         my $handle =
             Log::Fine::Handle::Email->new(
                            name => 'email11',
@@ -73,7 +89,30 @@ EOF
                            header_to         => $user,
             );
 
-        # Note that the default should be an EmailSender class
-        isa_ok($handle, "Log::Fine::Handle::Email::EmailSender");
+        isa_ok($handle, "Log::Fine::Handle::Email");
+
+        my $transport = Email::Sender::Simple->default_transport;
+        ok(ref $transport eq "Email::Sender::Transport::Test");
+
+        # Register the handle
+        $log->registerHandle($handle);
+
+        $log->log(DEBG, "Debugging 15-handle-email.t");
+        if ($email_sender_version < 0.120000) {
+                ok(scalar @{ $transport->deliveries } == 0);
+        } else {
+                ok(scalar $transport->deliveries == 0);
+        }
+
+        $transport->clear_deliveries();
+
+        $log->log(CRIT, "Beware the weeping angels");
+        if ($email_sender_version < 0.120000) {
+                ok(scalar @{ $transport->deliveries } == 1);
+        } else {
+                ok(scalar $transport->deliveries == 1);
+        }
+
+        #print STDERR Dumper $transport->deliveries();
 
 }

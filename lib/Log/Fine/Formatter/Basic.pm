@@ -11,18 +11,18 @@ applications.
     use Log::Fine::Formatter::Basic;
     use Log::Fine::Handle::Console;
 
-    # instantiate a handle
+    # Instantiate a handle
     my $handle = Log::Fine::Handle::Console->new();
 
-    # instantiate a formatter
+    # Instantiate a formatter
     my $formatter = Log::Fine::Formatter::Basic
         ->new( name             => 'basic0',
                timestamp_format => "%y-%m-%d %h:%m:%s" );
 
-    # set the formatter
+    # Set the formatter
     $handle->formatter( formatter => $formatter );
 
-    # format a msg
+    # Format a msg
     my $str = $formatter->format(INFO, "Resistance is futile", 1);
 
 =head1 DESCRIPTION
@@ -90,7 +90,7 @@ sub format
         my $msg  = shift;
         my $skip = shift;          # NOT USED
 
-        # return the formatted string
+        # Return the formatted string
         return
             sprintf("[%s] %-4s %s\n",
                     $self->_formatTime(), $self->levelMap()->valueToLevel($lvl),
@@ -101,7 +101,7 @@ sub format
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-log-fine-formatter-basic at rt.cpan.org>, or through the web interface at
+C<bug-log-fine at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
@@ -136,7 +136,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: ee9d429dfd883146339a7cce1ace10184b715932 $
+  $Id: 0ba0b53c033dfdfa346df379ba4437ddc85e1c1b $
 
 =head1 AUTHOR
 
@@ -148,7 +148,7 @@ L<perl>, L<Log::Fine::Formatter>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2009, 2010 Christopher M. Fuhrman, 
+Copyright (c) 2008-2010, 2013 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

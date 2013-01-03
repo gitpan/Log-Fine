@@ -20,10 +20,10 @@ Provides logging to a time-stamped file
                dir  => "/var/log",
                file => "myapp.%y%m%d.log" );
 
-    # register the handle
+    # Register the handle
     $log->registerHandle($handle);
 
-    # log something
+    # Log something
     $log->(INFO, "Opened new log handle");
 
 
@@ -61,36 +61,44 @@ See L<Log::Fine::Handle::File/fileHandle>
 sub fileHandle
 {
 
-        my $self  = shift;
+        my $self = shift;
 
-        # return if we have a registered filehandle and the date is
+        # Return if we have a registered filehandle and the date is
         # still the same
         return $self->{_filehandle}
-                if ( not $self->_fileRotate()
-                     and defined $self->{_filehandle}
+            if (    not $self->_fileRotate()
+                and defined $self->{_filehandle}
+                and ref $self->{_filehandle}
+                and UNIVERSAL::can($self->{_filehandle}, 'isa')
                 and $self->{_filehandle}->isa("IO::File")
                 and defined fileno($self->{_filehandle}));
 
-        # we need a new file.  Close our filehandle if it exists
-        $self->{_filehandle}->close()
-            if (    defined $self->{_filehandle}
-                and $self->{_filehandle}->isa("IO::File")
-                and defined fileno($self->{_filehandle}));
+        # We need a new file.  Close our filehandle if it exists
+        if (     defined $self->{_filehandle}
+             and ref $self->{_filehandle}
+             and UNIVERSAL::can($self->{_filehandle}, 'isa')
+             and $self->{_filehandle}->isa("IO::File")
+             and defined fileno($self->{_filehandle})) {
 
-        # generate file name
-        my $filename =
-            catdir($self->{dir}, $self->{_expanded_filename});
+                $self->_error(
+                              sprintf("Unable to close file handle to %s : %s",
+                                      $self->{_expanded_filename}, $!
+                              )) unless $self->{_filehandle}->close();
 
-        # generate a new filehandle
+        }
+
+        # Generate file name
+        my $filename = catdir($self->{dir}, $self->{_expanded_filename});
+
+        # Generate a new filehandle
         $self->{_filehandle} = FileHandle->new(">> " . $filename);
 
-        $self->_fatal("Unable to open log file $filename : $!\n")
+        $self->_error("Unable to open log file $filename : $!\n")
             unless defined $self->{_filehandle};
 
-        # set autoflush if necessary
+        # Set autoflush if necessary
         $self->{_filehandle}->autoflush($self->{autoflush});
 
-        # return the newly created file handle
         return $self->{_filehandle};
 
 }          # fileHandle();
@@ -98,7 +106,8 @@ sub fileHandle
 # --------------------------------------------------------------------
 
 ##
-# Determines if we need a new file name or not
+# Determines if we need a new file name or not.  Note that
+# {_expanded_filename} will be set to new value if we need to rotate
 #
 # @returns 1 if we need a file name, 0 otherwise
 
@@ -109,7 +118,7 @@ sub _fileRotate
         my $filename = strftime($self->{file}, localtime(time));
 
         if (not defined $self->{_expanded_filename}
-            or $self->{_expanded_filename} ne $filename) {
+             or $self->{_expanded_filename} ne $filename) {
                 $self->{_expanded_filename} = $filename;
                 return 1;
         } else {
@@ -120,12 +129,12 @@ sub _fileRotate
         # NOT REACHED
         #
 
-} # _fileName()
+}          # _fileName()
 
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-log-fine-handle-file-timestamp at rt.cpan.org>, or through the
+C<bug-log-fine-handle at rt.cpan.org>, or through the
 web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine>.  I will be
 notified, and then you'll automatically be notified of progress on
@@ -161,7 +170,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 50091a19836a6b44848a569c02e7b835ca43bdc6 $
+  $Id: df66e9521f12853f79c2e5d2ddbf4a59165eb4e7 $
 
 =head1 AUTHOR
 
@@ -173,7 +182,7 @@ L<perl>, L<Log::Fine>, L<Log::Fine::Handle::File>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2010-2011 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2010-2011, 2013 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

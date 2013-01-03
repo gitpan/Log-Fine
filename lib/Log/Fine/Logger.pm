@@ -10,19 +10,19 @@ Provides an object through which to log.
     use Log::Fine;
     use Log::Fine::Logger;
 
-    # get a new logging object
+    # Get a new logging object
     my $log = Log::Fine->logger("mylogger");
 
-    # alternatively, specify a custom map
+    # Alternatively, specify a custom map
     my $log = Log::Fine->logger("mylogger", "Syslog");
 
-    # register a handle
+    # Register a handle
     $log->registerHandle( Log::Fine::Handle::Console->new() );
 
-    # log a message
+    # Log a message
     $log->log(DEBG, "This is a really cool module!");
 
-    # illustrate use of the log skip API
+    # Illustrate use of the log skip API
     package Some::Package::That::Overrides::Log::Fine::Logger;
 
     use base qw( Log::Fine::Logger );
@@ -33,9 +33,9 @@ Provides an object through which to log.
         my $lvl  = shift;
         my $msg  = shift;
 
-        # do some custom stuff to message
+        # Do some custom stuff to message
 
-        # make sure the formatter logs the correct calling method.
+        # Make sure the formatter logs the correct calling method.
         $self->incrSkip();
         $self->SUPER::log($lvl, $msg);
         $self->decrSkip();
@@ -126,26 +126,25 @@ sub log
         my $lvl  = shift;
         my $msg  = shift;
 
-        # see if we have any handles defined
+        # See if we have any handles defined
         $self->_fatal("No handles defined!")
             unless (    defined $self->{_handles}
                     and ref $self->{_handles} eq "ARRAY"
                     and scalar @{ $self->{_handles} } > 0);
 
-        # iterate through each handle, logging as appropriate
+        # Iterate through each handle, logging as appropriate
         foreach my $handle (@{ $self->{_handles} }) {
                 $handle->msgWrite($lvl, $msg, $self->{_skip})
                     if $handle->isLoggable($lvl);
         }
 
-        # Victory
         return $self;
 
 }          # log()
 
 =head2 registerHandle
 
-Registers the given L<Log::Fine::Handle> object with the logging
+Register one or more L<Log::Fine::Handle> objects with the logging
 facility.
 
 =head3 Parameters
@@ -154,7 +153,8 @@ facility.
 
 =item  * handle
 
-A valid L<Log::Fine::Handle> subclass
+Can either be a valid Log::Fine::Handle object or an array ref
+containing one or more Log::Fine::Handle objects
 
 =back
 
@@ -167,22 +167,38 @@ The object
 sub registerHandle
 {
 
-        my $self   = shift;
-        my $handle = shift;
+        my $self = shift;
+        my $obj  = shift;
 
-        # validate handle
-        $self->_fatal(
-                    "first argument must be a valid Log::Fine::Handle object\n")
-            unless (defined $handle
-                    and $handle->isa("Log::Fine::Handle"));
-
-        # initialize handles if we haven't already
+        # Initialize handles if we haven't already
         $self->{_handles} = []
             unless (defined $self->{_handles}
                     and ref $self->{_handles} eq "ARRAY");
 
-        # save the handle
-        push @{ $self->{_handles} }, $handle;
+        if (     defined $obj
+             and ref $obj
+             and UNIVERSAL::can($obj, 'isa')
+             and $obj->isa('Log::Fine::Handle')) {
+                push @{ $self->{_handles} }, $obj;
+        } elsif (defined $obj and ref $obj eq 'ARRAY' and scalar @{$obj} > 0) {
+
+                foreach my $handle (@{$obj}) {
+                        $self->_fatal(  "Array ref must contain valid "
+                                      . "Log::Fine::Handle objects")
+                            unless (    defined $handle
+                                    and ref $handle
+                                    and UNIVERSAL::can($handle, 'isa')
+                                    and $handle->isa('Log::Fine::Handle'));
+                }
+
+                push @{ $self->{_handles} }, @{$obj};
+
+        } else {
+                $self->_fatal(  "first argument must either be a "
+                              . "valid Log::Fine::Handle object\n"
+                              . "or an array ref containing one or more "
+                              . "valid Log::Fine::Handle objects\n");
+        }
 
         return $self;
 
@@ -206,7 +222,7 @@ sub skip
         my $self = shift;
         my $val  = shift;
 
-        # if we are given a value, then set skip
+        # Should we be given a value, then set skip
         $self->{_skip} = $val
             if (defined $val and $val =~ /^\d+$/);
 
@@ -224,11 +240,11 @@ sub _init
 
         my $self = shift;
 
-        # validate name
+        # Validate name
         $self->_fatal("Loggers need names!")
             unless (defined $self->{name} and $self->{name} =~ /^\w+$/);
 
-        # set logskip if necessary
+        # Set logskip if necessary
         $self->{_skip} = LOG_SKIP_DEFAULT
             unless ($self->{_skip} and $self->{_skip} =~ /\d+/);
 
@@ -239,7 +255,7 @@ sub _init
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-log-fine-logger at rt.cpan.org>, or through the web interface at
+C<bug-log-fine at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
@@ -274,7 +290,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 127903180f3b98bf23dd379f25bf110fc0e8b435 $
+  $Id: e16b4b54b9adfef04daad4e2a92dd81fdff8bb70 $
 
 =head1 AUTHOR
 
@@ -286,7 +302,7 @@ L<perl>, L<Log::Fine>, L<Log::Fine::Handle>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2010 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2010, 2013 Christopher M. Fuhrman, 
 All rights reserved
 
 This program is free software licensed under the...

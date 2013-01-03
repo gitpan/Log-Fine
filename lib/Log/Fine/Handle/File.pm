@@ -13,7 +13,7 @@ Provides logging to a file
     # Get a new logger
     my $log = Log::Fine->logger("foo");
 
-    # register a file handle (default values shown)
+    # Create a file handle (default values shown)
     my $handle = Log::Fine::Handle::File
         ->new( name => 'file0',
                mask => LOGMASK_EMERG | LOGMASK_ALERT | LOGMASK_CRIT | LOGMASK_ERR | LOGMASK_WARNING | LOGMASK_NOTICE | LOGMASK_INFO,
@@ -21,10 +21,10 @@ Provides logging to a file
                file => "myapp.log",
                autoflush => 0 );
 
-    # register the handle
+    # Register the handle
     $log->registerHandle($handle);
 
-    # log something
+    # Log something
     $log->(INFO, "Opened new log handle");
 
 =head1 DESCRIPTION
@@ -111,28 +111,29 @@ sub fileHandle
 
         my $self = shift;
 
-        # if we already have a file handle defined, return it
+        # Should we already have a file handle defined, return it
         return $self->{_filehandle}
             if (    defined $self->{_filehandle}
+                and ref $self->{_filehandle}
+                and UNIVERSAL::can($self->{_filehandle}, 'isa')
                 and $self->{_filehandle}->isa("IO::File")
                 and defined fileno($self->{_filehandle}));
 
-        # generate file name
+        # Generate file name
         my $filename =
             ($self->{dir} =~ /\w/)
             ? catdir($self->{dir}, $self->{file})
             : $self->{file};
 
-        # otherwise create a new one
+        # Otherwise create a new one
         $self->{_filehandle} = FileHandle->new(">> " . $filename);
 
         $self->_fatal("Unable to open log file $filename : $!\n")
             unless defined $self->{_filehandle};
 
-        # set autoflush if necessary
+        # Set autoflush if necessary
         $self->{_filehandle}->autoflush($self->{autoflush});
 
-        # return the newly created file handle
         return $self->{_filehandle};
 
 }          # fileHandle()
@@ -151,23 +152,26 @@ sub msgWrite
         my $msg  = shift;
         my $skip = shift;
 
-        # grab a ref to our file handle
+        # Grab a ref to our file handle
         my $fh = $self->fileHandle();
 
-        # if we have a formatter defined, then use that, otherwise, just
-        # print the raw message
+        # Should we have a formatter defined, then use that,
+        # otherwise, just print the raw message
         $msg = $self->{formatter}->format($lvl, $msg, $skip)
             if defined $self->{formatter};
 
-        # print the message to the log file
-        print $fh $msg;
+        print $fh $msg or $self->_error("Cannot write to file handle : $!");
 
-        # if autoclose is set, then close the file handle.  This will
-        # force the creation of a new filehandle next time this method
-        # is called
-        $self->fileHandle()->close() if $self->{autoclose};
+        # Should {autoclose} be set, then close the file handle.  This
+        # will force the creation of a new filehandle the next time
+        # this method is called
+        if ($self->{autoclose}) {
+                $self->_error(
+                              sprintf("Unable to close filehandle to %s : %s",
+                                      catdir($self->{dir}, $self->{file}), $!
+                              )) unless $self->fileHandle()->close();
+        }
 
-        # Victory!
         return $self;
 
 }          # msgWrite()
@@ -182,10 +186,10 @@ sub _init
 
         my $self = shift;
 
-        # call the super object
+        # Perform any necessary upper class initializations
         $self->SUPER::_init();
 
-        # default directory is the current directory unless file is an
+        # Default directory is the current directory unless file is an
         # absolute path
         if ($self->{file} =~ /^\/|^[A-Za-z]:\\/) {
                 $self->{dir} = "";
@@ -193,7 +197,7 @@ sub _init
                 $self->{dir} = "./";
         }
 
-        # default file name is the name of the invoking program
+        # Default file name is the name of the invoking program
         # suffixed with ".log"
         $self->{file} = basename($0) . ".log"
             unless defined $self->{file};
@@ -206,30 +210,32 @@ sub _init
         $self->{autoclose} = 0
             unless defined $self->{autoclose};
 
-        # Victory!
         return $self;
 
 }          # _init()
 
 ##
-# called when this object is destroyed
+# Called when this object is destroyed
 
 sub DESTROY
 {
 
         my $self = shift;
 
-        # close our filehandle if necessary.
+        # Close our filehandle if necessary.
         $self->{_filehandle}->close()
-            if (defined $self->{_filehandle}
-                and $self->{_filehandle}->isa("IO::File"));
+            if (    defined $self->{_filehandle}
+                and ref $self->{_filehandle}
+                and UNIVERSAL::can($self->{_filehandle}, 'isa')
+                and $self->{_filehandle}->isa("IO::File")
+                and defined fileno($self->{_filehandle}));
 
 }          # DESTROY
 
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-log-fine-handle-file at rt.cpan.org>, or through the web interface at
+C<bug-log-fine at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
@@ -264,7 +270,7 @@ L<http://search.cpan.org/dist/Log-Fine>
 
 =head1 REVISION INFORMATION
 
-  $Id: 5fc56d0db5f7845533401a46a3ff114b54c5361e $
+  $Id: 9fc7b7a5fc191a636aae35378982cee305283542 $
 
 =head1 AUTHOR
 
@@ -276,7 +282,7 @@ L<perl>, L<Log::Fine>, L<Log::Fine::Handle>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (c) 2008, 2010-2011 Christopher M. Fuhrman, 
+Copyright (c) 2008, 2010-2011, 2013 Christopher M. Fuhrman, 
 All rights reserved.
 
 This program is free software licensed under the...

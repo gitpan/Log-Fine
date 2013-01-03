@@ -1,7 +1,7 @@
 #!perl
 
 #
-# $Id: e14ed31c7c678023445bf0eb2debb35eac79f7d3 $
+# $Id: 3533f64f4de219ca6b2a6308221e28e446aebf35 $
 #
 
 #use Data::Dumper;
@@ -65,8 +65,8 @@ use Test::More;
 
         # Create a formatted msg template
         my $msgtmpl = <<EOF;
-This is a test of Log::Fine::Handle::Email::EmailSender using Perl $].
-The following message was delivered at %%TIME%%:
+This is a test of Log::Fine::Handle::Email.  The following message was
+delivered at %%TIME%%:
 
 --------------------------------------------------------------------
 %%MSG%%
@@ -85,7 +85,7 @@ EOF
         isa_ok($subjfmt, "Log::Fine::Formatter::Template");
         isa_ok($bodyfmt, "Log::Fine::Formatter::Template");
 
-        # register an email handle
+        # Register an email handle
         my $handle =
             Log::Fine::Handle::Email->new(
                            name => 'email11',
@@ -98,14 +98,14 @@ EOF
 
         isa_ok($handle, "Log::Fine::Handle::Email");
 
-        # register the handle
+        # Register the handle
         $log->registerHandle($handle);
 
         # Grab number of messages
         my $msg_t1 =
             ($^O eq "solaris") ? qx! mailx -H | wc -l ! : qx! mail -H | wc -l !;
 
-        $log->log(DEBG, "Debugging $0");
+        $log->log(DEBG, "Debugging 16-handle-email-smtp.t");
         $log->log(CRIT, "Beware the weeping angels");
 
         # Give sendmail a chance to deliver
