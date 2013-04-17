@@ -144,7 +144,7 @@ array ref containing one or more destination addresses
 
 String containing email sender
 
-=item  * transport
+=item  + transport
 
 An L<Email::Sender::Transport> object.  See L<Email::Sender::Manual>
 for further details.
@@ -401,10 +401,6 @@ L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Log-Fine>
 L<http://search.cpan.org/dist/Log-Fine>
 
 =back
-
-=head1 REVISION INFORMATION
-
-  $Id: 174f5b1a727d3184707fc42626e4c825c6ec1b99 $
 
 =head1 AUTHOR
 

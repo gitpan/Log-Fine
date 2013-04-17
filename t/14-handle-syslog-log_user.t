@@ -1,9 +1,5 @@
 #!perl -T
 
-#
-# $Id: dbadae2a35e6018143d6517a169f36f2c4a6a6f9 $
-#
-
 use Test::More;
 
 use File::Basename;

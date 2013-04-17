@@ -1,9 +1,5 @@
 #!perl -T
 
-#
-# $Id: 47a456c7718ab1e3d909ebe56ab1c6a7c94d3c96 $
-#
-
 use Test::More tests => 21;
 
 use Log::Fine qw( :macros :masks );

@@ -1,7 +1,10 @@
 #!perl -T
 
 #
-# $Id: b18a7a9c3cce344c3f4a322459ec3c4f2a034fac $
+# Note: The purpose of these tests is to ensure that Log::Fine is able
+# to write out to a file with an absolute path under MSWin32 (e.g.,
+# C:\WINDOWS\Temp\foo.log).  This does *not* include cygwin, which
+# behaves more UNIX-y.
 #
 
 use Test::More;
@@ -11,19 +14,25 @@ use Log::Fine::Handle::File;
 use Log::Fine::Levels::Syslog;
 use Log::Fine::Logger;
 
+use File::Temp qw/ :mktemp /;
 use FileHandle;
 use POSIX qw(strftime);
 
 {
 
         if ($^O ne "MSWin32") {
-                plan skip_all => "Tests for MSWin32 environment only";
+                my $not_cygwin = ($^O ne "cygwin") ? "" : "(not cygwin) ";
+                plan skip_all =>
+                    "Tests for MSWin32 ${not_cygwin}environment only";
         } else {
                 plan tests => 5;
         }
 
-        my $file = sprintf("C:\\WINDOWS\\Temp\\log-fine-$$-%s",
-                           strftime("%Y%m%d%H%M%S", localtime(time)));
+        my ($tempfh, $file) = mkstemp('C:\WINDOWS\Temp\LFXXXXXX');
+
+        # We do not need $tempfh so close it
+        $tempfh->close();
+
         my $msg = "Smoke me a kipper, I'll be back for breakfast";
 
         # Get a logger
@@ -44,7 +53,7 @@ use POSIX qw(strftime);
         # Write a test message
         $handle->msgWrite(INFO, $msg, 1);
 
-        ok(-f $file);
+        ok(-e $file);
         $handle->fileHandle()->close();
 
         # Grab a ref to our filehandle

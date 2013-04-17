@@ -1,11 +1,6 @@
 #!perl -T
 
-#
-# $Id: 2c685a5540b1b0b274ae25ef4dc151b194e71ce5 $
-#
-
 use Test::More;
-
 use File::Basename;
 
 use Log::Fine;

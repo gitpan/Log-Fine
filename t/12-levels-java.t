@@ -1,9 +1,5 @@
 #!perl -T
 
-#
-# $Id: 186129e92bbb5018539d28273ca3da8b467b9793 $
-#
-
 use Test::More tests => 688;
 
 use Log::Fine;

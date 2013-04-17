@@ -1,9 +1,5 @@
 #!perl
 
-#
-# $Id: 3533f64f4de219ca6b2a6308221e28e446aebf35 $
-#
-
 #use Data::Dumper;
 use Log::Fine;
 use Log::Fine::Formatter::Template;
@@ -18,7 +14,7 @@ use Test::More;
         # Check environmental variables
         plan skip_all => "these tests are for testing by the author"
             unless $ENV{ENABLE_AUTHOR_TESTS};
-        plan skip_all => "cannot test SMTP under MsWin32 or cygwin"
+        plan skip_all => "cannot test SMTP under MSWin32 or cygwin"
             if (($^O eq "MSWin32") || ($^O eq "cygwin"));
         plan skip_all => "Email handle only supported in perl 5.8.3 or above"
             if $^V lt v5.8.3;
@@ -59,8 +55,9 @@ use Test::More;
         # Create a formatter for subject line
         my $subjfmt =
             Log::Fine::Formatter::Template->new(
-                      name     => 'email-subject',
-                      template => "%%LEVEL%% : Test of Log::Fine::Handle::Email"
+                     name     => 'email-subject',
+                     template => "%%LEVEL%% : Test of Log::Fine::Handle::Email",
+                     timestamp_format => '%c',
             );
 
         # Create a formatted msg template
@@ -102,8 +99,7 @@ EOF
         $log->registerHandle($handle);
 
         # Grab number of messages
-        my $msg_t1 =
-            ($^O eq "solaris") ? qx! mailx -H | wc -l ! : qx! mail -H | wc -l !;
+        my $msg_t1 = mailGetCount();
 
         $log->log(DEBG, "Debugging 16-handle-email-smtp.t");
         $log->log(CRIT, "Beware the weeping angels");
@@ -112,9 +108,28 @@ EOF
         print STDERR "---- Sleeping for 5 seconds";
         sleep 5;
 
-        my $msg_t2 =
-            ($^O eq "solaris") ? qx! mailx -H | wc -l ! : qx! mail -H | wc -l !;
+        my $msg_t2 = mailGetCount();
 
         ok($msg_t2 > $msg_t1);
 
 }
+
+sub mailGetCount
+{
+
+        my $count = 0;
+
+        # Since Log::Fine supports perl v5.8.3, which doesn't have the
+        # "switch" feature, roll our own Switch statement
+    SWITCH: {
+                ($^O =~ /solaris/)
+                    && do { $count = qx! mailx -H | wc -l !; last SWITCH };
+                ($^O =~ /openbsd/
+                     or ($^O =~ /linux/ and (-f "/etc/debian_version")))
+                    && do { $count = qx! echo "h" | mail | wc -l !; last SWITCH };
+                $count = qx! mail -H | wc -l !;
+        }
+
+        return $count;
+
+}          # mailGetCount()

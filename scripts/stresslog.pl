@@ -1,9 +1,5 @@
 #!/usr/bin/env perl
 
-#
-# $Id: 61ccebf7a6919e20cf11e964c5a1e0b8cd47ed85 $
-#
-
 use strict;
 use warnings;
 

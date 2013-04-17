@@ -1,9 +1,5 @@
 #!perl -T
 
-#
-# $Id: 3f3d23c19c034bdaa0a18196be44f3ec0630a438 $
-#
-
 use Test::More tests => 3;
 
 use Log::Fine;

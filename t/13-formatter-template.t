@@ -1,9 +1,5 @@
 #!perl -T
 
-#
-# $Id: 03dd6b0db22ae60c6bef803377bdad2ad698e4a5 $
-#
-
 use Test::More tests => 70;
 
 #use Data::Dumper;

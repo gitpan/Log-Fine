@@ -1,23 +1,28 @@
 # -*- mode: cperl -*-
 
-#
-# $Id: 3b143657b841258eaf73eccebaab3d02a452fbce $
-#
+BEGIN {
+        require 5.008003;
+}
 
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
+use Sys::Syslog 0.13;
+
 # Write our Makefile
 WriteMakefile(
+        ABSTRACT      => 'Yet another logging framework',
         NAME          => 'Log::Fine',
         AUTHOR        => 'Christopher M. Fuhrman <cfuhrman@panix.com>',
         LICENSE       => 'bsd',
         VERSION_FROM  => 'lib/Log/Fine.pm',
-        ABSTRACT_FROM => 'lib/Log/Fine.pm',
         PL_FILES      => {},
-        PREREQ_PM     => { 'Test::More' => 0, },
-        META_MERGE    => {
+        PREREQ_PM     => {
+                       'Test::More'  => 0,
+                       'Sys::Syslog' => "0.13"
+        },
+        META_MERGE => {
                 'resources' => {
                        bugtracker =>
 "http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Fine",
